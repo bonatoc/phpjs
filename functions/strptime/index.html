@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <title> - php.js</title>
+  <meta name="author" content="Kevin van Zonneveld">
+
+
+  <meta name="description" content="php.js is a resource that offers community-built JavaScript alternatives to PHP functions.">
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <link rel="canonical" href="http://phpjs.org/about/">
+  <link href="/favicon.ico" rel="shortcut icon">
+  <link href="//kvz.github.io/on-the-githubs/css/on-the-githubs.min.css" rel="stylesheet" />
+  <link data-meta="css.app" href="/assets/build/app.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script data-meta="js.head" src="/assets/build/head.js"></script>
+  <link href="/atom.xml" rel="alternate" title="php.js" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+  <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+</head>
+
+<a target="_blank" href="https://github.com/kvz/phpjs">
+  <img id="fork-us" style="position: absolute; z-index: 99; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub">
+</a>
+
+<body>
+  <header role="banner">
+    <hgroup>
+      <div id="logo">
+        <h1><a href="/"><span>php</span><span>.js</span></a></h1>
+        <div class="clear"></div>
+      </div>
+
+      <h2>Learn how to do it in JavaScript. Explore boundaries porting languages. Enjoy functions that turn out to be useful.</h2>
+
+      <div class="clear"></div>
+    </hgroup>
+
+  </header>
+  <nav role="navigation">
+    <ul class="subscription" data-subscription="rss">
+      <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+
+    </ul>
+
+    <form action="http://google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:phpjs.org" />
+        <input class="search" type="text" name="q" results="0" placeholder="Search" />
+      </fieldset>
+    </form>
+
+    <ul class="main-navigation">
+      <li><a href="/about/">About</a></li>
+      <li><a href="/blog/archives/">Blog</a></li>
+      <li><a href="/functions/">Functions</a></li>
+      <li><a href="/authors/">Authors</a></li>
+      <li><a href="https://github.com/kvz/phpjs">GitHub</a></li>
+    </ul>
+
+  </nav>
+  <div id="main">
+    <div id="content">
+
+      <div>
+  <article role="article">
+    
+    <p>
+  Here’s what a JavaScript equivalent for
+  <a href="http://php.net/manual/en/function.strptime.php">PHP’s strptime</a>
+  looks like.
+</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">strptime</span> <span class="p">(</span><span class="nx">dateStr</span><span class="p">,</span> <span class="nx">format</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//  discuss at: http://phpjs.org/functions/strptime/</span>
+  <span class="c1">// original by: Brett Zamir (http://brett-zamir.me)</span>
+  <span class="c1">// original by: strftime</span>
+  <span class="c1">//  depends on: setlocale</span>
+  <span class="c1">//  depends on: array_map</span>
+  <span class="c1">//        test: skip</span>
+  <span class="c1">//   example 1: strptime('20091112222135', '%Y%m%d%H%M%S'); // Return value will depend on date and locale</span>
+  <span class="c1">//   example 1: strptime('2009extra', '%Y');</span>
+  <span class="c1">//   returns 1: {tm_sec: 35, tm_min: 21, tm_hour: 22, tm_mday: 12, tm_mon: 10, tm_year: 109, tm_wday: 4, tm_yday: 315, unparsed: ''}</span>
+  <span class="c1">//   returns 1: {tm_sec:0, tm_min:0, tm_hour:0, tm_mday:0, tm_mon:0, tm_year:109, tm_wday:3, tm_yday: -1, unparsed: 'extra'}</span>
+
+  <span class="c1">// tm_isdst is in other docs; why not PHP?</span>
+
+  <span class="c1">// Needs more thorough testing and examples</span>
+
+  <span class="kd">var</span> <span class="nx">retObj</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">tm_sec</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="na">tm_min</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="na">tm_hour</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="na">tm_mday</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="na">tm_mon</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="na">tm_year</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="na">tm_wday</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="na">tm_yday</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="na">unparsed</span><span class="p">:</span> <span class="s1">''</span>
+    <span class="p">},</span>
+    <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span>
+    <span class="nx">amPmOffset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">prevHour</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">_reset</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">dateObj</span><span class="p">,</span> <span class="nx">realMday</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// realMday is to allow for a value of 0 in return results (but without</span>
+      <span class="c1">// messing up the Date() object)</span>
+      <span class="kd">var</span> <span class="nx">jan1</span><span class="p">,</span>
+        <span class="nx">o</span> <span class="o">=</span> <span class="nx">retObj</span><span class="p">,</span>
+        <span class="nx">d</span> <span class="o">=</span> <span class="nx">dateObj</span>
+      <span class="nx">o</span><span class="p">.</span><span class="nx">tm_sec</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getUTCSeconds</span><span class="p">()</span>
+      <span class="nx">o</span><span class="p">.</span><span class="nx">tm_min</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getUTCMinutes</span><span class="p">()</span>
+      <span class="nx">o</span><span class="p">.</span><span class="nx">tm_hour</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getUTCHours</span><span class="p">()</span>
+      <span class="nx">o</span><span class="p">.</span><span class="nx">tm_mday</span> <span class="o">=</span> <span class="nx">realMday</span> <span class="o">===</span> <span class="mi">0</span> <span class="p">?</span> <span class="nx">realMday</span> <span class="p">:</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getUTCDate</span><span class="p">()</span>
+      <span class="nx">o</span><span class="p">.</span><span class="nx">tm_mon</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getUTCMonth</span><span class="p">()</span>
+      <span class="nx">o</span><span class="p">.</span><span class="nx">tm_year</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getUTCFullYear</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1900</span>
+      <span class="nx">o</span><span class="p">.</span><span class="nx">tm_wday</span> <span class="o">=</span> <span class="nx">realMday</span> <span class="o">===</span> <span class="mi">0</span> <span class="p">?</span> <span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getUTCDay</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">?</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getUTCDay</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">6</span><span class="p">)</span> <span class="p">:</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getUTCDay</span><span class="p">()</span>
+      <span class="nx">jan1</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nx">UTC</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getUTCFullYear</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+      <span class="nx">o</span><span class="p">.</span><span class="nx">tm_yday</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span><span class="p">((</span><span class="nx">d</span> <span class="o">-</span> <span class="nx">jan1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span><span class="p">))</span>
+    <span class="p">},</span>
+    <span class="nx">_date</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="nx">retObj</span>
+      <span class="c1">// We set date to at least 1 to ensure year or month doesn't go backwards</span>
+      <span class="k">return</span> <span class="nx">_reset</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nx">UTC</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">tm_year</span> <span class="o">+</span> <span class="mi">1900</span><span class="p">,</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tm_mon</span><span class="p">,</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tm_mday</span> <span class="o">||</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tm_hour</span><span class="p">,</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tm_min</span><span class="p">,</span> <span class="nx">o</span><span class="p">.</span><span class="nx">tm_sec</span><span class="p">)),</span>
+        <span class="nx">o</span><span class="p">.</span><span class="nx">tm_mday</span><span class="p">)</span>
+    <span class="p">}</span>
+
+  <span class="c1">// BEGIN STATIC</span>
+  <span class="kd">var</span> <span class="nx">_NWS</span> <span class="o">=</span> <span class="sr">/</span><span class="se">\S</span><span class="sr">/</span><span class="p">,</span>
+    <span class="nx">_WS</span> <span class="o">=</span> <span class="sr">/</span><span class="se">\s</span><span class="sr">/</span>
+
+  <span class="kd">var</span> <span class="nx">_aggregates</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">c</span><span class="p">:</span> <span class="s1">'locale'</span><span class="p">,</span>
+    <span class="na">D</span><span class="p">:</span> <span class="s1">'%m/%d/%y'</span><span class="p">,</span>
+    <span class="na">F</span><span class="p">:</span> <span class="s1">'%y-%m-%d'</span><span class="p">,</span>
+    <span class="na">r</span><span class="p">:</span> <span class="s1">'locale'</span><span class="p">,</span>
+    <span class="na">R</span><span class="p">:</span> <span class="s1">'%H:%M'</span><span class="p">,</span>
+    <span class="na">T</span><span class="p">:</span> <span class="s1">'%H:%M:%S'</span><span class="p">,</span>
+    <span class="na">x</span><span class="p">:</span> <span class="s1">'locale'</span><span class="p">,</span>
+    <span class="na">X</span><span class="p">:</span> <span class="s1">'locale'</span>
+  <span class="p">}</span>
+
+  <span class="cm">/* Fix: Locale alternatives are supported though not documented in PHP; see http://linux.die.net/man/3/strptime
+Ec
+EC
+Ex
+EX
+Ey
+EY
+Od or Oe
+OH
+OI
+Om
+OM
+OS
+OU
+Ow
+OW
+Oy
+  */</span>
+  <span class="kd">var</span> <span class="nx">_preg_quote</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">str</span> <span class="o">+</span> <span class="s1">''</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!</span><span class="sr">&lt;&gt;</span><span class="se">\|\:])</span><span class="sr">/g</span><span class="p">,</span> <span class="s1">'\\$1'</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="c1">// END STATIC</span>
+
+  <span class="c1">// BEGIN REDUNDANT</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span> <span class="o">||</span> <span class="p">{}</span>
+  <span class="c1">// ensure setup of localization variables takes place</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">setlocale</span><span class="p">(</span><span class="s1">'LC_ALL'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="c1">// END REDUNDANT</span>
+
+  <span class="kd">var</span> <span class="nx">phpjs</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span>
+  <span class="kd">var</span> <span class="nx">locale</span> <span class="o">=</span> <span class="nx">phpjs</span><span class="p">.</span><span class="nx">localeCategories</span><span class="p">.</span><span class="nx">LC_TIME</span>
+  <span class="kd">var</span> <span class="nx">locales</span> <span class="o">=</span> <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span>
+  <span class="kd">var</span> <span class="nx">lc_time</span> <span class="o">=</span> <span class="nx">locales</span><span class="p">[</span><span class="nx">locale</span><span class="p">].</span><span class="nx">LC_TIME</span>
+
+  <span class="c1">// First replace aggregates (run in a loop because an agg may be made up of other aggs)</span>
+  <span class="k">while</span> <span class="p">(</span><span class="nx">format</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/%</span><span class="se">[</span><span class="sr">cDFhnrRtTxX</span><span class="se">]</span><span class="sr">/</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">format</span> <span class="o">=</span> <span class="nx">format</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/%</span><span class="se">([</span><span class="sr">cDFhnrRtTxX</span><span class="se">])</span><span class="sr">/g</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">m0</span><span class="p">,</span> <span class="nx">m1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">_aggregates</span><span class="p">[</span><span class="nx">m1</span><span class="p">]</span>
+      <span class="k">return</span> <span class="p">(</span><span class="nx">f</span> <span class="o">===</span> <span class="s1">'locale'</span> <span class="p">?</span> <span class="nx">lc_time</span><span class="p">[</span><span class="nx">m1</span><span class="p">]</span> <span class="p">:</span> <span class="nx">f</span><span class="p">)</span>
+    <span class="p">})</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">_addNext</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="nx">regex</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">regex</span> <span class="o">===</span> <span class="s1">'string'</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">regex</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">'^'</span> <span class="o">+</span> <span class="nx">regex</span><span class="p">,</span> <span class="s1">'i'</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">check</span> <span class="o">=</span> <span class="nx">dateStr</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">j</span><span class="p">)</span>
+    <span class="kd">var</span> <span class="nx">match</span> <span class="o">=</span> <span class="nx">regex</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">check</span><span class="p">)</span>
+    <span class="c1">// Even if the callback returns null after assigning to the return object, the object won't be saved anyways</span>
+    <span class="kd">var</span> <span class="nx">testNull</span> <span class="o">=</span> <span class="nx">match</span> <span class="p">?</span> <span class="nx">cb</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">match</span><span class="p">)</span> <span class="p">:</span> <span class="kc">null</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">testNull</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="s1">'No match in string'</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">match</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">_addLocalized</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="nx">formatChar</span><span class="p">,</span> <span class="nx">category</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">array_map</span><span class="p">(</span>
+        <span class="nx">_preg_quote</span><span class="p">,</span> <span class="nx">lc_time</span><span class="p">[</span><span class="nx">formatChar</span><span class="p">])</span>
+      <span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">'|'</span><span class="p">),</span> <span class="c1">// Could make each parenthesized instead and pass index to callback</span>
+
+      <span class="kd">function</span> <span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">match</span> <span class="o">=</span> <span class="nx">lc_time</span><span class="p">[</span><span class="nx">formatChar</span><span class="p">].</span><span class="nx">search</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">'^'</span> <span class="o">+</span> <span class="nx">_preg_quote</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'$'</span><span class="p">,</span> <span class="s1">'i'</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">match</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">retObj</span><span class="p">[</span><span class="nx">category</span><span class="p">]</span> <span class="o">=</span> <span class="nx">match</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">})</span>
+  <span class="p">}</span>
+
+  <span class="c1">// BEGIN PROCESSING CHARACTERS</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">format</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">format</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">===</span> <span class="s1">'%'</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">literalPos</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'%'</span><span class="p">,</span> <span class="s1">'n'</span><span class="p">,</span> <span class="s1">'t'</span><span class="p">].</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">format</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">literalPos</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">([</span><span class="s1">'%'</span><span class="p">,</span> <span class="s1">'\n'</span><span class="p">,</span> <span class="s1">'\t'</span><span class="p">].</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">dateStr</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">j</span><span class="p">))</span> <span class="o">===</span> <span class="nx">literalPos</span><span class="p">)</span> <span class="p">{</span>
+          <span class="c1">// a matched literal</span>
+          <span class="o">++</span><span class="nx">i</span><span class="p">;</span>
+          <span class="c1">// skip beyond</span>
+          <span class="o">++</span><span class="nx">j</span>
+          <span class="k">continue</span>
+        <span class="p">}</span>
+        <span class="c1">// Format indicated a percent literal, but not actually present</span>
+        <span class="k">return</span> <span class="kc">false</span>
+      <span class="p">}</span>
+      <span class="kd">var</span> <span class="nx">formatChar</span> <span class="o">=</span> <span class="nx">format</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="k">try</span> <span class="p">{</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="nx">formatChar</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">case</span> <span class="s1">'a'</span><span class="p">:</span>
+          <span class="c1">// Fall-through // Sun-Sat</span>
+          <span class="k">case</span> <span class="s1">'A'</span><span class="p">:</span>
+          <span class="c1">// Sunday-Saturday</span>
+          <span class="c1">// Changes nothing else</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addLocalized</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="nx">formatChar</span><span class="p">,</span> <span class="s1">'tm_wday'</span><span class="p">)</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'h'</span><span class="p">:</span>
+          <span class="c1">// Fall-through (alias of 'b');</span>
+          <span class="k">case</span> <span class="s1">'b'</span><span class="p">:</span>
+          <span class="c1">// Jan-Dec</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addLocalized</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'tm_mon'</span><span class="p">)</span>
+          <span class="c1">// Also changes wday, yday</span>
+            <span class="nx">_date</span><span class="p">()</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'B'</span><span class="p">:</span>
+          <span class="c1">// January-December</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addLocalized</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="nx">formatChar</span><span class="p">,</span> <span class="s1">'tm_mon'</span><span class="p">)</span>
+          <span class="c1">// Also changes wday, yday</span>
+            <span class="nx">_date</span><span class="p">()</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'C'</span><span class="p">:</span>
+          <span class="c1">// 0+; century (19 for 20th)</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/^</span><span class="se">\d?\d</span><span class="sr">/</span><span class="p">,</span> <span class="c1">// PHP docs say two-digit, but accepts one-digit (two-digit max)</span>
+
+            <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+              <span class="kd">var</span> <span class="nx">year</span> <span class="o">=</span> <span class="p">(</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-</span> <span class="mi">19</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+              <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_year</span> <span class="o">=</span> <span class="nx">year</span>
+              <span class="nx">_date</span><span class="p">()</span>
+              <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_yday</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_yday</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+              <span class="p">}</span>
+              <span class="c1">// Also changes wday; and sets yday to -1 (always?)</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'d'</span><span class="err">:</span>
+          <span class="c1">// Fall-through  01-31 day</span>
+          <span class="k">case</span> <span class="s1">'e'</span><span class="err">:</span>
+          <span class="c1">// 1-31 day</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="nx">formatChar</span> <span class="o">===</span> <span class="s1">'d'</span> <span class="p">?</span> <span class="sr">/^</span><span class="se">(</span><span class="sr">0</span><span class="se">[</span><span class="sr">1-9</span><span class="se">]</span><span class="sr">|</span><span class="se">[</span><span class="sr">1-2</span><span class="se">]\d</span><span class="sr">|3</span><span class="se">[</span><span class="sr">0-1</span><span class="se">])</span><span class="sr">/</span> <span class="p">:</span> <span class="sr">/^</span><span class="se">([</span><span class="sr">1-2</span><span class="se">]\d</span><span class="sr">|3</span><span class="se">[</span><span class="sr">0-1</span><span class="se">]</span><span class="sr">|</span><span class="se">[</span><span class="sr">1-9</span><span class="se">])</span><span class="sr">/</span><span class="p">,</span>
+            <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+              <span class="kd">var</span> <span class="nx">dayMonth</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+              <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_mday</span> <span class="o">=</span> <span class="nx">dayMonth</span>
+              <span class="c1">// Also changes w_day, y_day</span>
+              <span class="nx">_date</span><span class="p">()</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'g'</span><span class="err">:</span>
+          <span class="c1">// No apparent effect; 2-digit year (see 'V')</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'G'</span><span class="err">:</span>
+          <span class="c1">// No apparent effect; 4-digit year (see 'V')'</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'H'</span><span class="err">:</span>
+          <span class="c1">// 00-23 hours</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/^</span><span class="se">([</span><span class="sr">0-1</span><span class="se">]\d</span><span class="sr">|2</span><span class="se">[</span><span class="sr">0-3</span><span class="se">])</span><span class="sr">/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+              <span class="kd">var</span> <span class="nx">hour</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+              <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_hour</span> <span class="o">=</span> <span class="nx">hour</span>
+            <span class="c1">// Changes nothing else</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'l'</span><span class="err">:</span>
+          <span class="c1">// Fall-through of lower-case 'L'; 1-12 hours</span>
+          <span class="k">case</span> <span class="s1">'I'</span><span class="err">:</span>
+          <span class="c1">// 01-12 hours</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="nx">formatChar</span> <span class="o">===</span> <span class="s1">'l'</span> <span class="p">?</span> <span class="sr">/^</span><span class="se">([</span><span class="sr">1-9</span><span class="se">]</span><span class="sr">|1</span><span class="se">[</span><span class="sr">0-2</span><span class="se">])</span><span class="sr">/</span> <span class="p">:</span> <span class="sr">/^</span><span class="se">(</span><span class="sr">0</span><span class="se">[</span><span class="sr">1-9</span><span class="se">]</span><span class="sr">|1</span><span class="se">[</span><span class="sr">0-2</span><span class="se">])</span><span class="sr">/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+              <span class="kd">var</span> <span class="nx">hour</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="nx">amPmOffset</span>
+              <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_hour</span> <span class="o">=</span> <span class="nx">hour</span>
+            <span class="c1">// Used for coordinating with am-pm</span>
+              <span class="nx">prevHour</span> <span class="o">=</span> <span class="kc">true</span>
+            <span class="c1">// Changes nothing else, but affected by prior 'p/P'</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'j'</span><span class="err">:</span>
+          <span class="c1">// 001-366 day of year</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/^</span><span class="se">(</span><span class="sr">00</span><span class="se">[</span><span class="sr">1-9</span><span class="se">]</span><span class="sr">|0</span><span class="se">[</span><span class="sr">1-9</span><span class="se">]\d</span><span class="sr">|</span><span class="se">[</span><span class="sr">1-2</span><span class="se">]\d\d</span><span class="sr">|3</span><span class="se">[</span><span class="sr">0-6</span><span class="se">][</span><span class="sr">0-6</span><span class="se">])</span><span class="sr">/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+              <span class="kd">var</span> <span class="nx">dayYear</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+              <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_yday</span> <span class="o">=</span> <span class="nx">dayYear</span>
+            <span class="c1">// Changes nothing else (oddly, since if original by a given year, could calculate other fields)</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'m'</span><span class="err">:</span>
+          <span class="c1">// 01-12 month</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/^</span><span class="se">(</span><span class="sr">0</span><span class="se">[</span><span class="sr">1-9</span><span class="se">]</span><span class="sr">|1</span><span class="se">[</span><span class="sr">0-2</span><span class="se">])</span><span class="sr">/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+              <span class="kd">var</span> <span class="nx">month</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+              <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_mon</span> <span class="o">=</span> <span class="nx">month</span>
+            <span class="c1">// Also sets wday and yday</span>
+              <span class="nx">_date</span><span class="p">()</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'M'</span><span class="err">:</span>
+          <span class="c1">// 00-59 minutes</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/^</span><span class="se">[</span><span class="sr">0-5</span><span class="se">]\d</span><span class="sr">/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+              <span class="kd">var</span> <span class="nx">minute</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+              <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_min</span> <span class="o">=</span> <span class="nx">minute</span>
+            <span class="c1">// Changes nothing else</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'P'</span><span class="err">:</span>
+          <span class="c1">// Seems not to work; AM-PM</span>
+          <span class="c1">// Could make fall-through instead since supposed to be a synonym despite PHP docs</span>
+            <span class="k">return</span> <span class="kc">false</span>
+          <span class="k">case</span> <span class="s1">'p'</span><span class="err">:</span>
+          <span class="c1">// am-pm</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/^</span><span class="se">(</span><span class="sr">am|pm</span><span class="se">)</span><span class="sr">/i</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// No effect on 'H' since already 24 hours but</span>
+            <span class="c1">//   works before or after setting of l/I hour</span>
+              <span class="nx">amPmOffset</span> <span class="o">=</span> <span class="p">(</span><span class="sr">/a/</span><span class="p">)</span>
+              <span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="mi">12</span>
+              <span class="k">if</span> <span class="p">(</span><span class="nx">prevHour</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_hour</span> <span class="o">+=</span> <span class="nx">amPmOffset</span>
+              <span class="p">}</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'s'</span><span class="err">:</span>
+          <span class="c1">// Unix timestamp (in seconds)</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/^</span><span class="se">\d</span><span class="sr">+/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+              <span class="kd">var</span> <span class="nx">timestamp</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+              <span class="kd">var</span> <span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nx">UTC</span><span class="p">(</span><span class="nx">timestamp</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+              <span class="nx">_reset</span><span class="p">(</span><span class="nx">date</span><span class="p">)</span>
+            <span class="c1">// Affects all fields, but can't be negative (and initial + not allowed)</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'S'</span><span class="err">:</span>
+          <span class="c1">// 00-59 seconds</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/^</span><span class="se">[</span><span class="sr">0-5</span><span class="se">]\d</span><span class="sr">/</span><span class="p">,</span> <span class="c1">// strptime also accepts 60-61 for some reason</span>
+
+            <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+              <span class="kd">var</span> <span class="nx">second</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+              <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_sec</span> <span class="o">=</span> <span class="nx">second</span>
+              <span class="c1">// Changes nothing else</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'u'</span><span class="err">:</span>
+          <span class="c1">// Fall-through; 1 (Monday)-7(Sunday)</span>
+          <span class="k">case</span> <span class="s1">'w'</span><span class="err">:</span>
+          <span class="c1">// 0 (Sunday)-6(Saturday)</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/^</span><span class="se">\d</span><span class="sr">/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+              <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_wday</span> <span class="o">=</span> <span class="nx">d</span> <span class="o">-</span> <span class="p">(</span><span class="nx">formatChar</span> <span class="o">===</span> <span class="s1">'u'</span><span class="p">)</span>
+            <span class="c1">// Changes nothing else apparently</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'U'</span><span class="err">:</span>
+          <span class="c1">// Fall-through (week of year, from 1st Sunday)</span>
+          <span class="k">case</span> <span class="s1">'V'</span><span class="err">:</span>
+          <span class="c1">// Fall-through (ISO-8601:1988 week number; from first 4-weekday week, starting with Monday)</span>
+          <span class="k">case</span> <span class="s1">'W'</span><span class="err">:</span>
+          <span class="c1">// Apparently ignored (week of year, from 1st Monday)</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'y'</span><span class="err">:</span>
+          <span class="c1">// 69 (or higher) for 1969+, 68 (or lower) for 2068-</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/^</span><span class="se">\d?\d</span><span class="sr">/</span><span class="p">,</span> <span class="c1">// PHP docs say two-digit, but accepts one-digit (two-digit max)</span>
+
+            <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+              <span class="nx">d</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+              <span class="kd">var</span> <span class="nx">year</span> <span class="o">=</span> <span class="nx">d</span> <span class="o">&gt;=</span> <span class="mi">69</span> <span class="p">?</span> <span class="nx">d</span> <span class="p">:</span> <span class="nx">d</span> <span class="o">+</span> <span class="mi">100</span>
+              <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_year</span> <span class="o">=</span> <span class="nx">year</span>
+              <span class="nx">_date</span><span class="p">()</span>
+              <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_yday</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_yday</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+              <span class="p">}</span>
+              <span class="c1">// Also changes wday; and sets yday to -1 (always?)</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'Y'</span><span class="err">:</span>
+          <span class="c1">// 2010 (4-digit year)</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/^</span><span class="se">\d{1,4}</span><span class="sr">/</span><span class="p">,</span> <span class="c1">// PHP docs say four-digit, but accepts one-digit (four-digit max)</span>
+
+            <span class="kd">function</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+              <span class="kd">var</span> <span class="nx">year</span> <span class="o">=</span> <span class="p">(</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1900</span>
+              <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_year</span> <span class="o">=</span> <span class="nx">year</span>
+              <span class="nx">_date</span><span class="p">()</span>
+              <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_yday</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">retObj</span><span class="p">.</span><span class="nx">tm_yday</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+              <span class="p">}</span>
+              <span class="c1">// Also changes wday; and sets yday to -1 (always?)</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'z'</span><span class="err">:</span>
+          <span class="c1">// Timezone; on my system, strftime gives -0800, but strptime seems not to alter hour setting</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'Z'</span><span class="err">:</span>
+          <span class="c1">// Timezone; on my system, strftime gives PST, but strptime treats text as unparsed</span>
+            <span class="k">break</span>
+          <span class="k">default</span><span class="err">:</span>
+            <span class="k">throw</span> <span class="s1">'Unrecognized formatting character in strptime()'</span>
+        <span class="p">}</span>
+      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">e</span> <span class="o">===</span> <span class="s1">'No match in string'</span><span class="p">)</span> <span class="p">{</span>
+          <span class="c1">// Allow us to exit</span>
+          <span class="c1">// There was supposed to be a matching format but there wasn't</span>
+          <span class="k">return</span> <span class="kc">false</span>
+        <span class="p">}</span>
+        <span class="c1">// Calculate skipping beyond initial percent too</span>
+      <span class="p">}</span><span class="o">++</span><span class="nx">i</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">format</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">!==</span> <span class="nx">dateStr</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">j</span><span class="p">))</span> <span class="p">{</span>
+      <span class="c1">// If extra whitespace at beginning or end of either, or between formats, no problem</span>
+      <span class="c1">// (just a problem when between % and format specifier)</span>
+
+      <span class="c1">// If the string has white-space, it is ok to ignore</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">dateStr</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">j</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="nx">_WS</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">j</span><span class="o">++</span>
+        <span class="c1">// Let the next iteration try again with the same format character</span>
+        <span class="nx">i</span><span class="o">--</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">format</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="nx">_NWS</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Any extra formatting characters besides white-space causes</span>
+        <span class="c1">// problems (do check after WS though, as may just be WS in string before next character)</span>
+        <span class="k">return</span> <span class="kc">false</span>
+      <span class="p">}</span>
+      <span class="c1">// Extra WS in format</span>
+      <span class="c1">// Adjust strings when encounter non-matching whitespace, so they align in future checks above</span>
+      <span class="c1">// Will check on next iteration (against same (non-WS) string character)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">j</span><span class="o">++</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="c1">// POST-PROCESSING</span>
+  <span class="c1">// Will also get extra whitespace; empty string if none</span>
+  <span class="nx">retObj</span><span class="p">.</span><span class="nx">unparsed</span> <span class="o">=</span> <span class="nx">dateStr</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">j</span><span class="p">)</span>
+  <span class="k">return</span> <span class="nx">retObj</span>
+<span class="p">}</span></code></pre></figure>
+
+<a class="basic-alignment left themebutton" href="https://github.com/kvz/phpjs/blob/master/functions/datetime/strptime.js">View on GitHub</a>
+<a class="basic-alignment left themebutton" href="https://github.com/kvz/phpjs/edit/master/functions/datetime/strptime.js">Edit on GitHub</a>
+<a class="basic-alignment left themebutton" href="https://raw.githubusercontent.com/kvz/phpjs/master/functions/datetime/strptime.js">Source on GitHub</a>
+
+<div class="clearfix"></div>
+
+
+
+
+<h2>A community initiative</h2>
+<p>
+  php.js offers community built functions and goes by the
+  <a href="https://medium.com/what-i-learned-building/9216e1c9da7d">McDonald’s Theory</a>.
+  We’ll put online functions that aren't perfect, in the hopes to spark better contributions.
+  Do you have one? You can directly edit this file on GitHub, this will create a Pull Request that
+  the core team can review, and merge into our codebase.
+</p>
+<p>
+  This way of working also means that we don't offer any
+  production guarantees, and recommend to use php.js inspiration
+  and learning purposes only.
+</p>
+
+
+
+
+  <h2>Dependencies</h2>
+
+  <ul>
+  
+    <li><a href="/functions/setlocale">setlocale</a></li>
+  
+    <li><a href="/functions/array_map">array_map</a></li>
+  
+  </ul>
+
+
+
+  
+    <h2>Example 1</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">strptime</span><span class="p">(</span><span class="s1">'20091112222135'</span><span class="p">,</span> <span class="s1">'%Y%m%d%H%M%S'</span><span class="p">);</span> <span class="c1">// Return value will depend on date and locale</span>
+<span class="nx">strptime</span><span class="p">(</span><span class="s1">'2009extra'</span><span class="p">,</span> <span class="s1">'%Y'</span><span class="p">);</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">{</span><span class="nl">tm_sec</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span> <span class="nx">tm_min</span><span class="err">:</span> <span class="mi">21</span><span class="p">,</span> <span class="nx">tm_hour</span><span class="err">:</span> <span class="mi">22</span><span class="p">,</span> <span class="nx">tm_mday</span><span class="err">:</span> <span class="mi">12</span><span class="p">,</span> <span class="nx">tm_mon</span><span class="err">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">tm_year</span><span class="err">:</span> <span class="mi">109</span><span class="p">,</span> <span class="nx">tm_wday</span><span class="err">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">tm_yday</span><span class="err">:</span> <span class="mi">315</span><span class="p">,</span> <span class="nx">unparsed</span><span class="err">:</span> <span class="s1">''</span><span class="p">}</span>
+<span class="p">{</span><span class="nl">tm_sec</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="nx">tm_min</span><span class="err">:</span><span class="mi">0</span><span class="p">,</span> <span class="nx">tm_hour</span><span class="err">:</span><span class="mi">0</span><span class="p">,</span> <span class="nx">tm_mday</span><span class="err">:</span><span class="mi">0</span><span class="p">,</span> <span class="nx">tm_mon</span><span class="err">:</span><span class="mi">0</span><span class="p">,</span> <span class="nx">tm_year</span><span class="err">:</span><span class="mi">109</span><span class="p">,</span> <span class="nx">tm_wday</span><span class="err">:</span><span class="mi">3</span><span class="p">,</span> <span class="nx">tm_yday</span><span class="err">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">unparsed</span><span class="err">:</span> <span class="s1">'extra'</span><span class="p">}</span></code></pre></figure>
+  
+
+
+<p>
+  <a class="basic-alignment left themebutton" href="/functions/#datetime">&laquo; More datetime functions</a>
+</p>
+
+  </article>
+</div>
+
+
+
+      <aside class="sidebar">
+        <section>
+  <h1>Advertisement</h1>
+  <div id="carbonads-container" style="padding-top: 20px !important; padding-left: 40px !important; ">
+    <div class="carbonad">
+      <div id="azcarbon"></div>
+      <script type="text/javascript">
+        var z = document.createElement("script");
+        z.type = "text/javascript";
+        z.async = true;
+        z.src = "http://engine.carbonads.com/z/55999/azcarbon_2_1_0_VERT";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(z, s);
+      </script>
+    </div>
+  </div>
+
+  <h1>Uploading &amp; Encoding</h1>
+  <p>
+    Struggling with file uploads?
+    <a title="File uploading &amp; encoding service" style="color: #3464a4;" href="https://transloadit.com">Transloadit</a>
+    deals with progress bars, encoding, resizing, and storing, so you can focus on your web/app. It's pretty sweet.
+  </p>
+</section>
+
+<!-- Generated by Rakefile:build -->
+<section>
+  <h1>Categories</h1>
+  <ul id='category-list'>
+    
+    
+    <li><a href="/functions/#array">array</a> (75)</li>
+    
+    <li><a href="/functions/#bc">bc</a> (7)</li>
+    
+    <li><a href="/functions/#ctype">ctype</a> (11)</li>
+    
+    <li><a href="/functions/#datetime">datetime</a> (15)</li>
+    
+    <li><a href="/functions/#exec">exec</a> (1)</li>
+    
+    <li><a href="/functions/#filesystem">filesystem</a> (5)</li>
+    
+    <li><a href="/functions/#funchand">funchand</a> (5)</li>
+    
+    <li><a href="/functions/#i18n">i18n</a> (2)</li>
+    
+    <li><a href="/functions/#info">info</a> (7)</li>
+    
+    <li><a href="/functions/#json">json</a> (3)</li>
+    
+    <li><a href="/functions/#math">math</a> (46)</li>
+    
+    <li><a href="/functions/#misc">misc</a> (3)</li>
+    
+    <li><a href="/functions/#net-gopher">net-gopher</a> (1)</li>
+    
+    <li><a href="/functions/#network">network</a> (6)</li>
+    
+    <li><a href="/functions/#pcre">pcre</a> (3)</li>
+    
+    <li><a href="/functions/#strings">strings</a> (91)</li>
+    
+    <li><a href="/functions/#url">url</a> (10)</li>
+    
+    <li><a href="/functions/#var">var</a> (31)</li>
+    
+    <li><a href="/functions/#xdiff">xdiff</a> (2)</li>
+    
+    <li><a href="/functions/#xml">xml</a> (2)</li>
+    
+  </ul>
+</section>
+<section>
+  <h1>On the githubs</h1>
+  <ul class="on-the-githubs" data-event-source="repos/kvz/phpjs">Loading...</ul>
+  <br />
+  <br />
+</section>
+
+
+<section>
+  <h1>Badges</h1>
+
+  <p>
+    <a href="http://travis-ci.org/kvz/phpjs"><img src="https://secure.travis-ci.org/kvz/phpjs.png?branch=master" /></a>
+    <br />
+    <a href="https://npmjs.org/package/phpjs"><img src="http://badge.fury.io/js/phpjs.png" /></a>
+    <br />
+    <a href="https://david-dm.org/kvz/phpjs"><img src="https://david-dm.org/kvz/phpjs.png?theme=shields.io" /></a>
+    <br />
+    <a href="https://david-dm.org/kvz/phpjs#info=devDependencies"><img src="https://david-dm.org/kvz/phpjs/dev-status.png?theme=shields.io" /></a>
+    <br />
+  </p>
+
+  <h1>Sponsor development</h1>
+
+  <p>
+    <a href="https://www.gittip.com/kvz/"><img src="http://img.shields.io/gittip/kvz.png?color=green" /></a>
+    <br />
+    <a href="https://flattr.com/submit/auto?user_id=kvz&url=https://github.com/kvz/phpjs&title=phpjs&language=&tags=github&category=software"><img src="http://img.shields.io/flattr/donate.png?color=green" /></a>
+    <br />
+    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=kevin%40vanzonneveld%2enet&lc=NL&item_name=Open%20source%20donation%20to%20Kevin%20van%20Zonneveld&currency_code=USD&bn=PP-DonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><img src="http://img.shields.io/paypal/donate.png?color=green" /></a>
+    <br />
+    <a href="https://coinbase.com/checkouts/19BtCjLCboRgTAXiaEvnvkdoRyjd843Dg2"><img src="http://img.shields.io/bitcoin/donate.png?color=green" /></a>
+    <br />
+  </p>
+</section>
+
+      </aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo">
+    <p>
+      Copyright &copy; 2007-2016 - <a href="http://twitter.com/kvz">Kevin van Zonneveld</a> and <a href="/authors/">contributors</a> -
+      <span class="credit">Powered by <a href="http://jekyllrb.com">Jekyll</a></span> -
+      <span class="credit">Theme by <a href="http://melandri.net/2012/07/23/darkstripes-octopress-theme-released/">alessandro melandri</a></span>
+    </p>
+
+  </footer>
+
+  <script data-meta="js.app" src="/assets/build/app.js"></script>
+
+  <script src="//kvz.github.io/on-the-githubs/js/jquery.on-the-githubs.min.js"></script>
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.on-the-githubs').onthegithubs();
+      // If you use bootstrap and want to enable tooltips
+      // $('a[rel]').tooltip();
+    })
+  </script>
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-63083-7']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script');
+      ga.type = 'text/javascript';
+      ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</body>
+</html>

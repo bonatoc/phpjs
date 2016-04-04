@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <title> - php.js</title>
+  <meta name="author" content="Kevin van Zonneveld">
+
+
+  <meta name="description" content="php.js is a resource that offers community-built JavaScript alternatives to PHP functions.">
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <link rel="canonical" href="http://phpjs.org/about/">
+  <link href="/favicon.ico" rel="shortcut icon">
+  <link href="//kvz.github.io/on-the-githubs/css/on-the-githubs.min.css" rel="stylesheet" />
+  <link data-meta="css.app" href="/assets/build/app.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script data-meta="js.head" src="/assets/build/head.js"></script>
+  <link href="/atom.xml" rel="alternate" title="php.js" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+  <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+</head>
+
+<a target="_blank" href="https://github.com/kvz/phpjs">
+  <img id="fork-us" style="position: absolute; z-index: 99; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub">
+</a>
+
+<body>
+  <header role="banner">
+    <hgroup>
+      <div id="logo">
+        <h1><a href="/"><span>php</span><span>.js</span></a></h1>
+        <div class="clear"></div>
+      </div>
+
+      <h2>Learn how to do it in JavaScript. Explore boundaries porting languages. Enjoy functions that turn out to be useful.</h2>
+
+      <div class="clear"></div>
+    </hgroup>
+
+  </header>
+  <nav role="navigation">
+    <ul class="subscription" data-subscription="rss">
+      <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+
+    </ul>
+
+    <form action="http://google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:phpjs.org" />
+        <input class="search" type="text" name="q" results="0" placeholder="Search" />
+      </fieldset>
+    </form>
+
+    <ul class="main-navigation">
+      <li><a href="/about/">About</a></li>
+      <li><a href="/blog/archives/">Blog</a></li>
+      <li><a href="/functions/">Functions</a></li>
+      <li><a href="/authors/">Authors</a></li>
+      <li><a href="https://github.com/kvz/phpjs">GitHub</a></li>
+    </ul>
+
+  </nav>
+  <div id="main">
+    <div id="content">
+
+      <div>
+  <article role="article">
+    
+    <p>
+  Here’s what a JavaScript equivalent for
+  <a href="http://php.net/manual/en/function.date.php">PHP’s date</a>
+  looks like.
+</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">date</span> <span class="p">(</span><span class="nx">format</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//  discuss at: http://phpjs.org/functions/date/</span>
+  <span class="c1">// original by: Carlos R. L. Rodrigues (http://www.jsfromhell.com)</span>
+  <span class="c1">// original by: gettimeofday</span>
+  <span class="c1">//    parts by: Peter-Paul Koch (http://www.quirksmode.org/js/beat.html)</span>
+  <span class="c1">// improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)</span>
+  <span class="c1">// improved by: MeEtc (http://yass.meetcweb.com)</span>
+  <span class="c1">// improved by: Brad Touesnard</span>
+  <span class="c1">// improved by: Tim Wiel</span>
+  <span class="c1">// improved by: Bryan Elliott</span>
+  <span class="c1">// improved by: David Randall</span>
+  <span class="c1">// improved by: Theriault</span>
+  <span class="c1">// improved by: Theriault</span>
+  <span class="c1">// improved by: Brett Zamir (http://brett-zamir.me)</span>
+  <span class="c1">// improved by: Theriault</span>
+  <span class="c1">// improved by: Thomas Beaucourt (http://www.webapp.fr)</span>
+  <span class="c1">// improved by: JT</span>
+  <span class="c1">// improved by: Theriault</span>
+  <span class="c1">// improved by: Rafał Kukawski (http://blog.kukawski.pl)</span>
+  <span class="c1">// improved by: Theriault</span>
+  <span class="c1">//    input by: Brett Zamir (http://brett-zamir.me)</span>
+  <span class="c1">//    input by: majak</span>
+  <span class="c1">//    input by: Alex</span>
+  <span class="c1">//    input by: Martin</span>
+  <span class="c1">//    input by: Alex Wilson</span>
+  <span class="c1">//    input by: Haravikk</span>
+  <span class="c1">// bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)</span>
+  <span class="c1">// bugfixed by: majak</span>
+  <span class="c1">// bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)</span>
+  <span class="c1">// bugfixed by: Brett Zamir (http://brett-zamir.me)</span>
+  <span class="c1">// bugfixed by: omid (http://phpjs.org/functions/380:380#comment_137122)</span>
+  <span class="c1">// bugfixed by: Chris (http://www.devotis.nl/)</span>
+  <span class="c1">//        note: Uses global: php_js to store the default timezone</span>
+  <span class="c1">//        note: Although the function potentially allows timezone info (see notes), it currently does not set</span>
+  <span class="c1">//        note: per a timezone specified by date_default_timezone_set(). Implementers might use</span>
+  <span class="c1">//        note: this.php_js.currentTimezoneOffset and this.php_js.currentTimezoneDST set by that function</span>
+  <span class="c1">//        note: in order to adjust the dates in this function (or our other date functions!) accordingly</span>
+  <span class="c1">//   example 1: date('H:m:s \\m \\i\\s \\m\\o\\n\\t\\h', 1062402400);</span>
+  <span class="c1">//   returns 1: '09:09:40 m is month'</span>
+  <span class="c1">//   example 2: date('F j, Y, g:i a', 1062462400);</span>
+  <span class="c1">//   returns 2: 'September 2, 2003, 2:26 am'</span>
+  <span class="c1">//   example 3: date('Y W o', 1062462400);</span>
+  <span class="c1">//   returns 3: '2003 36 2003'</span>
+  <span class="c1">//   example 4: x = date('Y m d', (new Date()).getTime()/1000);</span>
+  <span class="c1">//   example 4: (x+'').length == 10 // 2009 01 09</span>
+  <span class="c1">//   returns 4: true</span>
+  <span class="c1">//   example 5: date('W', 1104534000);</span>
+  <span class="c1">//   returns 5: '53'</span>
+  <span class="c1">//   example 6: date('B t', 1104534000);</span>
+  <span class="c1">//   returns 6: '999 31'</span>
+  <span class="c1">//   example 7: date('W U', 1293750000.82); // 2010-12-31</span>
+  <span class="c1">//   returns 7: '52 1293750000'</span>
+  <span class="c1">//   example 8: date('W', 1293836400); // 2011-01-01</span>
+  <span class="c1">//   returns 8: '52'</span>
+  <span class="c1">//   example 9: date('W Y-m-d', 1293974054); // 2011-01-02</span>
+  <span class="c1">//   returns 9: '52 2011-01-02'</span>
+
+  <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span>
+  <span class="kd">var</span> <span class="nx">jsdate</span><span class="p">,</span> <span class="nx">f</span>
+  <span class="c1">// Keep this here (works, but for code commented-out below for file size reasons)</span>
+  <span class="c1">// var tal= [];</span>
+  <span class="kd">var</span> <span class="nx">txt_words</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">'Sun'</span><span class="p">,</span> <span class="s1">'Mon'</span><span class="p">,</span> <span class="s1">'Tues'</span><span class="p">,</span> <span class="s1">'Wednes'</span><span class="p">,</span> <span class="s1">'Thurs'</span><span class="p">,</span> <span class="s1">'Fri'</span><span class="p">,</span> <span class="s1">'Satur'</span><span class="p">,</span>
+    <span class="s1">'January'</span><span class="p">,</span> <span class="s1">'February'</span><span class="p">,</span> <span class="s1">'March'</span><span class="p">,</span> <span class="s1">'April'</span><span class="p">,</span> <span class="s1">'May'</span><span class="p">,</span> <span class="s1">'June'</span><span class="p">,</span>
+    <span class="s1">'July'</span><span class="p">,</span> <span class="s1">'August'</span><span class="p">,</span> <span class="s1">'September'</span><span class="p">,</span> <span class="s1">'October'</span><span class="p">,</span> <span class="s1">'November'</span><span class="p">,</span> <span class="s1">'December'</span>
+  <span class="p">]</span>
+  <span class="c1">// trailing backslash -&gt; (dropped)</span>
+  <span class="c1">// a backslash followed by any character (including backslash) -&gt; the character</span>
+  <span class="c1">// empty string -&gt; empty string</span>
+  <span class="kd">var</span> <span class="nx">formatChr</span> <span class="o">=</span> <span class="sr">/</span><span class="se">\\?(</span><span class="sr">.</span><span class="se">?)</span><span class="sr">/gi</span>
+  <span class="kd">var</span> <span class="nx">formatChrCb</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">f</span><span class="p">[</span><span class="nx">t</span><span class="p">]</span> <span class="p">?</span> <span class="nx">f</span><span class="p">[</span><span class="nx">t</span><span class="p">]()</span> <span class="p">:</span> <span class="nx">s</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_pad</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">n</span> <span class="o">=</span> <span class="nb">String</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">n</span> <span class="o">=</span> <span class="s1">'0'</span> <span class="o">+</span> <span class="nx">n</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">n</span>
+  <span class="p">}</span>
+  <span class="nx">f</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">// Day</span>
+    <span class="na">d</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Day of month w/leading 0; 01..31</span>
+      <span class="k">return</span> <span class="nx">_pad</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">j</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="nx">D</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Shorthand day name; Mon...Sun</span>
+      <span class="k">return</span> <span class="nx">f</span><span class="p">.</span><span class="nx">l</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="nx">j</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Day of month; 1..31</span>
+      <span class="k">return</span> <span class="nx">jsdate</span><span class="p">.</span><span class="nx">getDate</span><span class="p">()</span>
+    <span class="p">},</span>
+    <span class="nx">l</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Full day name; Monday...Sunday</span>
+      <span class="k">return</span> <span class="nx">txt_words</span><span class="p">[</span><span class="nx">f</span><span class="p">.</span><span class="nx">w</span><span class="p">()]</span> <span class="o">+</span> <span class="s1">'day'</span>
+    <span class="p">},</span>
+    <span class="nx">N</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// ISO-8601 day of week; 1[Mon]..7[Sun]</span>
+      <span class="k">return</span> <span class="nx">f</span><span class="p">.</span><span class="nx">w</span><span class="p">()</span> <span class="o">||</span> <span class="mi">7</span>
+    <span class="p">},</span>
+    <span class="nx">S</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Ordinal suffix for day of month; st, nd, rd, th</span>
+      <span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">f</span><span class="p">.</span><span class="nx">j</span><span class="p">()</span>
+      <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">j</span> <span class="o">%</span> <span class="mi">10</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="nb">parseInt</span><span class="p">((</span><span class="nx">j</span> <span class="o">%</span> <span class="mi">100</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="p">[</span><span class="s1">'st'</span><span class="p">,</span> <span class="s1">'nd'</span><span class="p">,</span> <span class="s1">'rd'</span><span class="p">][</span><span class="nx">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">||</span> <span class="s1">'th'</span>
+    <span class="p">},</span>
+    <span class="nx">w</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Day of week; 0[Sun]..6[Sat]</span>
+      <span class="k">return</span> <span class="nx">jsdate</span><span class="p">.</span><span class="nx">getDay</span><span class="p">()</span>
+    <span class="p">},</span>
+    <span class="nx">z</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Day of year; 0..365</span>
+      <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">Y</span><span class="p">(),</span> <span class="nx">f</span><span class="p">.</span><span class="nx">n</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">f</span><span class="p">.</span><span class="nx">j</span><span class="p">())</span>
+      <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">Y</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">((</span><span class="nx">a</span> <span class="o">-</span> <span class="nx">b</span><span class="p">)</span> <span class="o">/</span> <span class="mi">864</span><span class="nx">e5</span><span class="p">)</span>
+    <span class="p">},</span>
+
+    <span class="c1">// Week</span>
+    <span class="nx">W</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// ISO-8601 week number</span>
+      <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">Y</span><span class="p">(),</span> <span class="nx">f</span><span class="p">.</span><span class="nx">n</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">f</span><span class="p">.</span><span class="nx">j</span><span class="p">()</span> <span class="o">-</span> <span class="nx">f</span><span class="p">.</span><span class="nx">N</span><span class="p">()</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span>
+      <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+      <span class="k">return</span> <span class="nx">_pad</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">((</span><span class="nx">a</span> <span class="o">-</span> <span class="nx">b</span><span class="p">)</span> <span class="o">/</span> <span class="mi">864</span><span class="nx">e5</span> <span class="o">/</span> <span class="mi">7</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">},</span>
+
+    <span class="c1">// Month</span>
+    <span class="nx">F</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Full month name; January...December</span>
+      <span class="k">return</span> <span class="nx">txt_words</span><span class="p">[</span><span class="mi">6</span> <span class="o">+</span> <span class="nx">f</span><span class="p">.</span><span class="nx">n</span><span class="p">()]</span>
+    <span class="p">},</span>
+    <span class="nx">m</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Month w/leading 0; 01...12</span>
+      <span class="k">return</span> <span class="nx">_pad</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">n</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="nx">M</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Shorthand month name; Jan...Dec</span>
+      <span class="k">return</span> <span class="nx">f</span><span class="p">.</span><span class="nx">F</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="nx">n</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Month; 1...12</span>
+      <span class="k">return</span> <span class="nx">jsdate</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">},</span>
+    <span class="nx">t</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Days in month; 28...31</span>
+      <span class="k">return</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">Y</span><span class="p">(),</span> <span class="nx">f</span><span class="p">.</span><span class="nx">n</span><span class="p">(),</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="p">.</span><span class="nx">getDate</span><span class="p">()</span>
+    <span class="p">},</span>
+
+    <span class="c1">// Year</span>
+    <span class="nx">L</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Is leap year?; 0 or 1</span>
+      <span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">f</span><span class="p">.</span><span class="nx">Y</span><span class="p">()</span>
+      <span class="k">return</span> <span class="nx">j</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">&amp;</span> <span class="nx">j</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">!==</span> <span class="mi">0</span> <span class="o">|</span> <span class="nx">j</span> <span class="o">%</span> <span class="mi">400</span> <span class="o">===</span> <span class="mi">0</span>
+    <span class="p">},</span>
+    <span class="nx">o</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// ISO-8601 year</span>
+      <span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">f</span><span class="p">.</span><span class="nx">n</span><span class="p">()</span>
+      <span class="kd">var</span> <span class="nx">W</span> <span class="o">=</span> <span class="nx">f</span><span class="p">.</span><span class="nx">W</span><span class="p">()</span>
+      <span class="kd">var</span> <span class="nx">Y</span> <span class="o">=</span> <span class="nx">f</span><span class="p">.</span><span class="nx">Y</span><span class="p">()</span>
+      <span class="k">return</span> <span class="nx">Y</span> <span class="o">+</span> <span class="p">(</span><span class="nx">n</span> <span class="o">===</span> <span class="mi">12</span> <span class="o">&amp;&amp;</span> <span class="nx">W</span> <span class="o">&lt;</span> <span class="mi">9</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">W</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="p">?</span> <span class="o">-</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="nx">Y</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Full year; e.g. 1980...2010</span>
+      <span class="k">return</span> <span class="nx">jsdate</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">()</span>
+    <span class="p">},</span>
+    <span class="nx">y</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Last two digits of year; 00...99</span>
+      <span class="k">return</span> <span class="nx">f</span><span class="p">.</span><span class="nx">Y</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+    <span class="p">},</span>
+
+    <span class="c1">// Time</span>
+    <span class="nx">a</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// am or pm</span>
+      <span class="k">return</span> <span class="nx">jsdate</span><span class="p">.</span><span class="nx">getHours</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">11</span> <span class="p">?</span> <span class="s1">'pm'</span> <span class="p">:</span> <span class="s1">'am'</span>
+    <span class="p">},</span>
+    <span class="nx">A</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// AM or PM</span>
+      <span class="k">return</span> <span class="nx">f</span><span class="p">.</span><span class="nx">a</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()</span>
+    <span class="p">},</span>
+    <span class="nx">B</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Swatch Internet time; 000..999</span>
+      <span class="kd">var</span> <span class="nx">H</span> <span class="o">=</span> <span class="nx">jsdate</span><span class="p">.</span><span class="nx">getUTCHours</span><span class="p">()</span> <span class="o">*</span> <span class="mi">36</span><span class="nx">e2</span>
+      <span class="c1">// Hours</span>
+      <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">jsdate</span><span class="p">.</span><span class="nx">getUTCMinutes</span><span class="p">()</span> <span class="o">*</span> <span class="mi">60</span>
+      <span class="c1">// Minutes</span>
+      <span class="c1">// Seconds</span>
+      <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">jsdate</span><span class="p">.</span><span class="nx">getUTCSeconds</span><span class="p">()</span>
+      <span class="k">return</span> <span class="nx">_pad</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">((</span><span class="nx">H</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="nx">s</span> <span class="o">+</span> <span class="mi">36</span><span class="nx">e2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">86.4</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1</span><span class="nx">e3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="nx">g</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// 12-Hours; 1..12</span>
+      <span class="k">return</span> <span class="nx">f</span><span class="p">.</span><span class="nx">G</span><span class="p">()</span> <span class="o">%</span> <span class="mi">12</span> <span class="o">||</span> <span class="mi">12</span>
+    <span class="p">},</span>
+    <span class="nx">G</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// 24-Hours; 0..23</span>
+      <span class="k">return</span> <span class="nx">jsdate</span><span class="p">.</span><span class="nx">getHours</span><span class="p">()</span>
+    <span class="p">},</span>
+    <span class="nx">h</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// 12-Hours w/leading 0; 01..12</span>
+      <span class="k">return</span> <span class="nx">_pad</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">g</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="nx">H</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// 24-Hours w/leading 0; 00..23</span>
+      <span class="k">return</span> <span class="nx">_pad</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">G</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="nx">i</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Minutes w/leading 0; 00..59</span>
+      <span class="k">return</span> <span class="nx">_pad</span><span class="p">(</span><span class="nx">jsdate</span><span class="p">.</span><span class="nx">getMinutes</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="nx">s</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Seconds w/leading 0; 00..59</span>
+      <span class="k">return</span> <span class="nx">_pad</span><span class="p">(</span><span class="nx">jsdate</span><span class="p">.</span><span class="nx">getSeconds</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="nx">u</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Microseconds; 000000-999000</span>
+      <span class="k">return</span> <span class="nx">_pad</span><span class="p">(</span><span class="nx">jsdate</span><span class="p">.</span><span class="nx">getMilliseconds</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="p">},</span>
+
+    <span class="c1">// Timezone</span>
+    <span class="nx">e</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Timezone identifier; e.g. Atlantic/Azores, ...</span>
+      <span class="c1">// The following works, but requires inclusion of the very large</span>
+      <span class="c1">// timezone_abbreviations_list() function.</span>
+      <span class="cm">/*              return that.date_default_timezone_get();
+       */</span>
+      <span class="k">throw</span> <span class="s1">'Not supported (see source code of date() for timezone on how to add support)'</span>
+    <span class="p">},</span>
+    <span class="nx">I</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// DST observed?; 0 or 1</span>
+      <span class="c1">// Compares Jan 1 minus Jan 1 UTC to Jul 1 minus Jul 1 UTC.</span>
+      <span class="c1">// If they are not equal, then DST is observed.</span>
+      <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">Y</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="c1">// Jan 1</span>
+      <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">UTC</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">Y</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="c1">// Jan 1 UTC</span>
+      <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">Y</span><span class="p">(),</span> <span class="mi">6</span><span class="p">)</span>
+      <span class="c1">// Jul 1</span>
+      <span class="c1">// Jul 1 UTC</span>
+      <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">UTC</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">Y</span><span class="p">(),</span> <span class="mi">6</span><span class="p">)</span>
+      <span class="k">return</span> <span class="p">((</span><span class="nx">a</span> <span class="o">-</span> <span class="nx">c</span><span class="p">)</span> <span class="o">!==</span> <span class="p">(</span><span class="nx">b</span> <span class="o">-</span> <span class="nx">d</span><span class="p">))</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+    <span class="nx">O</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Difference to GMT in hour format; e.g. +0200</span>
+      <span class="kd">var</span> <span class="nx">tzo</span> <span class="o">=</span> <span class="nx">jsdate</span><span class="p">.</span><span class="nx">getTimezoneOffset</span><span class="p">()</span>
+      <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">tzo</span><span class="p">)</span>
+      <span class="k">return</span> <span class="p">(</span><span class="nx">tzo</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">?</span> <span class="s1">'-'</span> <span class="p">:</span> <span class="s1">'+'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">_pad</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">a</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">+</span> <span class="nx">a</span> <span class="o">%</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="nx">P</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Difference to GMT w/colon; e.g. +02:00</span>
+      <span class="kd">var</span> <span class="nx">O</span> <span class="o">=</span> <span class="nx">f</span><span class="p">.</span><span class="nx">O</span><span class="p">()</span>
+      <span class="k">return</span> <span class="p">(</span><span class="nx">O</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="s1">':'</span> <span class="o">+</span> <span class="nx">O</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="p">},</span>
+    <span class="nx">T</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Timezone abbreviation; e.g. EST, MDT, ...</span>
+      <span class="c1">// The following works, but requires inclusion of the very</span>
+      <span class="c1">// large timezone_abbreviations_list() function.</span>
+      <span class="cm">/*              var abbr, i, os, _default;
+      if (!tal.length) {
+        tal = that.timezone_abbreviations_list();
+      }
+      if (that.php_js &amp;&amp; that.php_js.default_timezone) {
+        _default = that.php_js.default_timezone;
+        for (abbr in tal) {
+          for (i = 0; i &lt; tal[abbr].length; i++) {
+            if (tal[abbr][i].timezone_id === _default) {
+              return abbr.toUpperCase();
+            }
+          }
+        }
+      }
+      for (abbr in tal) {
+        for (i = 0; i &lt; tal[abbr].length; i++) {
+          os = -jsdate.getTimezoneOffset() * 60;
+          if (tal[abbr][i].offset === os) {
+            return abbr.toUpperCase();
+          }
+        }
+      }
+      */</span>
+      <span class="k">return</span> <span class="s1">'UTC'</span>
+    <span class="p">},</span>
+    <span class="nx">Z</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Timezone offset in seconds (-43200...50400)</span>
+      <span class="k">return</span> <span class="o">-</span><span class="nx">jsdate</span><span class="p">.</span><span class="nx">getTimezoneOffset</span><span class="p">()</span> <span class="o">*</span> <span class="mi">60</span>
+    <span class="p">},</span>
+
+    <span class="c1">// Full Date/Time</span>
+    <span class="nx">c</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// ISO-8601 date.</span>
+      <span class="k">return</span> <span class="s1">'Y-m-d\\TH:i:sP'</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">formatChr</span><span class="p">,</span> <span class="nx">formatChrCb</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="nx">r</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// RFC 2822</span>
+      <span class="k">return</span> <span class="s1">'D, d M Y H:i:s O'</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">formatChr</span><span class="p">,</span> <span class="nx">formatChrCb</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="nx">U</span><span class="err">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="c1">// Seconds since UNIX epoch</span>
+      <span class="k">return</span> <span class="nx">jsdate</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">|</span> <span class="mi">0</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">date</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">format</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span>
+    <span class="nx">jsdate</span> <span class="o">=</span> <span class="p">(</span><span class="nx">timestamp</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="p">?</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span> <span class="p">:</span> <span class="c1">// Not provided</span>
+      <span class="p">(</span><span class="nx">timestamp</span> <span class="k">instanceof</span> <span class="nb">Date</span><span class="p">)</span> <span class="p">?</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">timestamp</span><span class="p">)</span> <span class="p">:</span> <span class="c1">// JS Date()</span>
+      <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">timestamp</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span> <span class="c1">// UNIX timestamp (auto-convert to int)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="nx">format</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">formatChr</span><span class="p">,</span> <span class="nx">formatChrCb</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">date</span><span class="p">(</span><span class="nx">format</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<a class="basic-alignment left themebutton" href="https://github.com/kvz/phpjs/blob/master/functions/datetime/date.js">View on GitHub</a>
+<a class="basic-alignment left themebutton" href="https://github.com/kvz/phpjs/edit/master/functions/datetime/date.js">Edit on GitHub</a>
+<a class="basic-alignment left themebutton" href="https://raw.githubusercontent.com/kvz/phpjs/master/functions/datetime/date.js">Source on GitHub</a>
+
+<div class="clearfix"></div>
+
+
+
+
+<h2>A community initiative</h2>
+<p>
+  php.js offers community built functions and goes by the
+  <a href="https://medium.com/what-i-learned-building/9216e1c9da7d">McDonald’s Theory</a>.
+  We’ll put online functions that aren't perfect, in the hopes to spark better contributions.
+  Do you have one? You can directly edit this file on GitHub, this will create a Pull Request that
+  the core team can review, and merge into our codebase.
+</p>
+<p>
+  This way of working also means that we don't offer any
+  production guarantees, and recommend to use php.js inspiration
+  and learning purposes only.
+</p>
+
+
+  <h2>Notes</h2>
+  
+    <p>Uses global: php_js to store the default timezone
+Although the function potentially allows timezone info (see notes), it currently does not set
+per a timezone specified by date_default_timezone_set(). Implementers might use
+this.php_js.currentTimezoneOffset and this.php_js.currentTimezoneDST set by that function
+in order to adjust the dates in this function (or our other date functions!) accordingly</p>
+
+  
+
+
+
+
+
+  
+    <h2>Example 1</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">date</span><span class="p">(</span><span class="s1">'H:m:s \\m \\i\\s \\m\\o\\n\\t\\h'</span><span class="p">,</span> <span class="mi">1062402400</span><span class="p">);</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s1">'09:09:40 m is month'</span></code></pre></figure>
+  
+    <h2>Example 2</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">date</span><span class="p">(</span><span class="s1">'F j, Y, g:i a'</span><span class="p">,</span> <span class="mi">1062462400</span><span class="p">);</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s1">'September 2, 2003, 2:26 am'</span></code></pre></figure>
+  
+    <h2>Example 3</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">date</span><span class="p">(</span><span class="s1">'Y W o'</span><span class="p">,</span> <span class="mi">1062462400</span><span class="p">);</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s1">'2003 36 2003'</span></code></pre></figure>
+  
+    <h2>Example 4</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">x</span> <span class="o">=</span> <span class="nx">date</span><span class="p">(</span><span class="s1">'Y m d'</span><span class="p">,</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()).</span><span class="nx">getTime</span><span class="p">()</span><span class="o">/</span><span class="mi">1000</span><span class="p">);</span>
+<span class="p">(</span><span class="nx">x</span><span class="o">+</span><span class="s1">''</span><span class="p">).</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">10</span> <span class="c1">// 2009 01 09</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kc">true</span></code></pre></figure>
+  
+    <h2>Example 5</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">date</span><span class="p">(</span><span class="s1">'W'</span><span class="p">,</span> <span class="mi">1104534000</span><span class="p">);</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s1">'53'</span></code></pre></figure>
+  
+    <h2>Example 6</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">date</span><span class="p">(</span><span class="s1">'B t'</span><span class="p">,</span> <span class="mi">1104534000</span><span class="p">);</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s1">'999 31'</span></code></pre></figure>
+  
+    <h2>Example 7</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">date</span><span class="p">(</span><span class="s1">'W U'</span><span class="p">,</span> <span class="mf">1293750000.82</span><span class="p">);</span> <span class="c1">// 2010-12-31</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s1">'52 1293750000'</span></code></pre></figure>
+  
+    <h2>Example 8</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">date</span><span class="p">(</span><span class="s1">'W'</span><span class="p">,</span> <span class="mi">1293836400</span><span class="p">);</span> <span class="c1">// 2011-01-01</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s1">'52'</span></code></pre></figure>
+  
+    <h2>Example 9</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">date</span><span class="p">(</span><span class="s1">'W Y-m-d'</span><span class="p">,</span> <span class="mi">1293974054</span><span class="p">);</span> <span class="c1">// 2011-01-02</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s1">'52 2011-01-02'</span></code></pre></figure>
+  
+
+
+<p>
+  <a class="basic-alignment left themebutton" href="/functions/#datetime">&laquo; More datetime functions</a>
+</p>
+
+  </article>
+</div>
+
+
+
+      <aside class="sidebar">
+        <section>
+  <h1>Advertisement</h1>
+  <div id="carbonads-container" style="padding-top: 20px !important; padding-left: 40px !important; ">
+    <div class="carbonad">
+      <div id="azcarbon"></div>
+      <script type="text/javascript">
+        var z = document.createElement("script");
+        z.type = "text/javascript";
+        z.async = true;
+        z.src = "http://engine.carbonads.com/z/55999/azcarbon_2_1_0_VERT";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(z, s);
+      </script>
+    </div>
+  </div>
+
+  <h1>Uploading &amp; Encoding</h1>
+  <p>
+    Struggling with file uploads?
+    <a title="File uploading &amp; encoding service" style="color: #3464a4;" href="https://transloadit.com">Transloadit</a>
+    deals with progress bars, encoding, resizing, and storing, so you can focus on your web/app. It's pretty sweet.
+  </p>
+</section>
+
+<!-- Generated by Rakefile:build -->
+<section>
+  <h1>Categories</h1>
+  <ul id='category-list'>
+    
+    
+    <li><a href="/functions/#array">array</a> (75)</li>
+    
+    <li><a href="/functions/#bc">bc</a> (7)</li>
+    
+    <li><a href="/functions/#ctype">ctype</a> (11)</li>
+    
+    <li><a href="/functions/#datetime">datetime</a> (15)</li>
+    
+    <li><a href="/functions/#exec">exec</a> (1)</li>
+    
+    <li><a href="/functions/#filesystem">filesystem</a> (5)</li>
+    
+    <li><a href="/functions/#funchand">funchand</a> (5)</li>
+    
+    <li><a href="/functions/#i18n">i18n</a> (2)</li>
+    
+    <li><a href="/functions/#info">info</a> (7)</li>
+    
+    <li><a href="/functions/#json">json</a> (3)</li>
+    
+    <li><a href="/functions/#math">math</a> (46)</li>
+    
+    <li><a href="/functions/#misc">misc</a> (3)</li>
+    
+    <li><a href="/functions/#net-gopher">net-gopher</a> (1)</li>
+    
+    <li><a href="/functions/#network">network</a> (6)</li>
+    
+    <li><a href="/functions/#pcre">pcre</a> (3)</li>
+    
+    <li><a href="/functions/#strings">strings</a> (91)</li>
+    
+    <li><a href="/functions/#url">url</a> (10)</li>
+    
+    <li><a href="/functions/#var">var</a> (31)</li>
+    
+    <li><a href="/functions/#xdiff">xdiff</a> (2)</li>
+    
+    <li><a href="/functions/#xml">xml</a> (2)</li>
+    
+  </ul>
+</section>
+<section>
+  <h1>On the githubs</h1>
+  <ul class="on-the-githubs" data-event-source="repos/kvz/phpjs">Loading...</ul>
+  <br />
+  <br />
+</section>
+
+
+<section>
+  <h1>Badges</h1>
+
+  <p>
+    <a href="http://travis-ci.org/kvz/phpjs"><img src="https://secure.travis-ci.org/kvz/phpjs.png?branch=master" /></a>
+    <br />
+    <a href="https://npmjs.org/package/phpjs"><img src="http://badge.fury.io/js/phpjs.png" /></a>
+    <br />
+    <a href="https://david-dm.org/kvz/phpjs"><img src="https://david-dm.org/kvz/phpjs.png?theme=shields.io" /></a>
+    <br />
+    <a href="https://david-dm.org/kvz/phpjs#info=devDependencies"><img src="https://david-dm.org/kvz/phpjs/dev-status.png?theme=shields.io" /></a>
+    <br />
+  </p>
+
+  <h1>Sponsor development</h1>
+
+  <p>
+    <a href="https://www.gittip.com/kvz/"><img src="http://img.shields.io/gittip/kvz.png?color=green" /></a>
+    <br />
+    <a href="https://flattr.com/submit/auto?user_id=kvz&url=https://github.com/kvz/phpjs&title=phpjs&language=&tags=github&category=software"><img src="http://img.shields.io/flattr/donate.png?color=green" /></a>
+    <br />
+    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=kevin%40vanzonneveld%2enet&lc=NL&item_name=Open%20source%20donation%20to%20Kevin%20van%20Zonneveld&currency_code=USD&bn=PP-DonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><img src="http://img.shields.io/paypal/donate.png?color=green" /></a>
+    <br />
+    <a href="https://coinbase.com/checkouts/19BtCjLCboRgTAXiaEvnvkdoRyjd843Dg2"><img src="http://img.shields.io/bitcoin/donate.png?color=green" /></a>
+    <br />
+  </p>
+</section>
+
+      </aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo">
+    <p>
+      Copyright &copy; 2007-2016 - <a href="http://twitter.com/kvz">Kevin van Zonneveld</a> and <a href="/authors/">contributors</a> -
+      <span class="credit">Powered by <a href="http://jekyllrb.com">Jekyll</a></span> -
+      <span class="credit">Theme by <a href="http://melandri.net/2012/07/23/darkstripes-octopress-theme-released/">alessandro melandri</a></span>
+    </p>
+
+  </footer>
+
+  <script data-meta="js.app" src="/assets/build/app.js"></script>
+
+  <script src="//kvz.github.io/on-the-githubs/js/jquery.on-the-githubs.min.js"></script>
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.on-the-githubs').onthegithubs();
+      // If you use bootstrap and want to enable tooltips
+      // $('a[rel]').tooltip();
+    })
+  </script>
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-63083-7']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script');
+      ga.type = 'text/javascript';
+      ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</body>
+</html>

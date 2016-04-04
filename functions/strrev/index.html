@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <title> - php.js</title>
+  <meta name="author" content="Kevin van Zonneveld">
+
+
+  <meta name="description" content="php.js is a resource that offers community-built JavaScript alternatives to PHP functions.">
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <link rel="canonical" href="http://phpjs.org/about/">
+  <link href="/favicon.ico" rel="shortcut icon">
+  <link href="//kvz.github.io/on-the-githubs/css/on-the-githubs.min.css" rel="stylesheet" />
+  <link data-meta="css.app" href="/assets/build/app.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script data-meta="js.head" src="/assets/build/head.js"></script>
+  <link href="/atom.xml" rel="alternate" title="php.js" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+  <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+</head>
+
+<a target="_blank" href="https://github.com/kvz/phpjs">
+  <img id="fork-us" style="position: absolute; z-index: 99; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub">
+</a>
+
+<body>
+  <header role="banner">
+    <hgroup>
+      <div id="logo">
+        <h1><a href="/"><span>php</span><span>.js</span></a></h1>
+        <div class="clear"></div>
+      </div>
+
+      <h2>Learn how to do it in JavaScript. Explore boundaries porting languages. Enjoy functions that turn out to be useful.</h2>
+
+      <div class="clear"></div>
+    </hgroup>
+
+  </header>
+  <nav role="navigation">
+    <ul class="subscription" data-subscription="rss">
+      <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+
+    </ul>
+
+    <form action="http://google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:phpjs.org" />
+        <input class="search" type="text" name="q" results="0" placeholder="Search" />
+      </fieldset>
+    </form>
+
+    <ul class="main-navigation">
+      <li><a href="/about/">About</a></li>
+      <li><a href="/blog/archives/">Blog</a></li>
+      <li><a href="/functions/">Functions</a></li>
+      <li><a href="/authors/">Authors</a></li>
+      <li><a href="https://github.com/kvz/phpjs">GitHub</a></li>
+    </ul>
+
+  </nav>
+  <div id="main">
+    <div id="content">
+
+      <div>
+  <article role="article">
+    
+    <p>
+  Here’s what a JavaScript equivalent for
+  <a href="http://php.net/manual/en/function.strrev.php">PHP’s strrev</a>
+  looks like.
+</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">strrev</span> <span class="p">(</span><span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//       discuss at: http://phpjs.org/functions/strrev/</span>
+  <span class="c1">//      original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)</span>
+  <span class="c1">//      bugfixed by: Onno Marsman</span>
+  <span class="c1">// reimplemented by: Brett Zamir (http://brett-zamir.me)</span>
+  <span class="c1">//        example 1: strrev('Kevin van Zonneveld');</span>
+  <span class="c1">//        returns 1: 'dlevennoZ nav niveK'</span>
+  <span class="c1">//        example 2: strrev('a\u0301haB') === 'Baha\u0301'; // combining</span>
+  <span class="c1">//        returns 2: true</span>
+  <span class="c1">//        example 3: strrev('A\uD87E\uDC04Z') === 'Z\uD87E\uDC04A'; // surrogates</span>
+  <span class="c1">//        returns 3: true</span>
+
+  <span class="nx">string</span> <span class="o">=</span> <span class="nx">string</span> <span class="o">+</span> <span class="s1">''</span>
+
+  <span class="c1">// Performance will be enhanced with the next two lines of code commented</span>
+  <span class="c1">//      out if you don't care about combining characters</span>
+  <span class="c1">// Keep Unicode combining characters together with the character preceding</span>
+  <span class="c1">//      them and which they are modifying (as in PHP 6)</span>
+  <span class="c1">// See http://unicode.org/reports/tr44/#Property_Table (Me+Mn)</span>
+  <span class="c1">// We also add the low surrogate range at the beginning here so it will be</span>
+  <span class="c1">//      maintained with its preceding high surrogate</span>
+  <span class="kd">var</span> <span class="nx">grapheme_extend</span> <span class="o">=</span>
+    <span class="sr">/</span><span class="se">(</span><span class="sr">.</span><span class="se">)([\u</span><span class="sr">DC00-</span><span class="se">\u</span><span class="sr">DFFF</span><span class="se">\u</span><span class="sr">0300-</span><span class="se">\u</span><span class="sr">036F</span><span class="se">\u</span><span class="sr">0483-</span><span class="se">\u</span><span class="sr">0489</span><span class="se">\u</span><span class="sr">0591-</span><span class="se">\u</span><span class="sr">05BD</span><span class="se">\u</span><span class="sr">05BF</span><span class="se">\u</span><span class="sr">05C1</span><span class="se">\u</span><span class="sr">05C2</span><span class="se">\u</span><span class="sr">05C4</span><span class="se">\u</span><span class="sr">05C5</span><span class="se">\u</span><span class="sr">05C7</span><span class="se">\u</span><span class="sr">0610-</span><span class="se">\u</span><span class="sr">061A</span><span class="se">\u</span><span class="sr">064B-</span><span class="se">\u</span><span class="sr">065E</span><span class="se">\u</span><span class="sr">0670</span><span class="se">\u</span><span class="sr">06D6-</span><span class="se">\u</span><span class="sr">06DC</span><span class="se">\u</span><span class="sr">06DE-</span><span class="se">\u</span><span class="sr">06E4</span><span class="se">\u</span><span class="sr">06E7</span><span class="se">\u</span><span class="sr">06E8</span><span class="se">\u</span><span class="sr">06EA-</span><span class="se">\u</span><span class="sr">06ED</span><span class="se">\u</span><span class="sr">0711</span><span class="se">\u</span><span class="sr">0730-</span><span class="se">\u</span><span class="sr">074A</span><span class="se">\u</span><span class="sr">07A6-</span><span class="se">\u</span><span class="sr">07B0</span><span class="se">\u</span><span class="sr">07EB-</span><span class="se">\u</span><span class="sr">07F3</span><span class="se">\u</span><span class="sr">0901-</span><span class="se">\u</span><span class="sr">0903</span><span class="se">\u</span><span class="sr">093C</span><span class="se">\u</span><span class="sr">093E-</span><span class="se">\u</span><span class="sr">094D</span><span class="se">\u</span><span class="sr">0951-</span><span class="se">\u</span><span class="sr">0954</span><span class="se">\u</span><span class="sr">0962</span><span class="se">\u</span><span class="sr">0963</span><span class="se">\u</span><span class="sr">0981-</span><span class="se">\u</span><span class="sr">0983</span><span class="se">\u</span><span class="sr">09BC</span><span class="se">\u</span><span class="sr">09BE-</span><span class="se">\u</span><span class="sr">09C4</span><span class="se">\u</span><span class="sr">09C7</span><span class="se">\u</span><span class="sr">09C8</span><span class="se">\u</span><span class="sr">09CB-</span><span class="se">\u</span><span class="sr">09CD</span><span class="se">\u</span><span class="sr">09D7</span><span class="se">\u</span><span class="sr">09E2</span><span class="se">\u</span><span class="sr">09E3</span><span class="se">\u</span><span class="sr">0A01-</span><span class="se">\u</span><span class="sr">0A03</span><span class="se">\u</span><span class="sr">0A3C</span><span class="se">\u</span><span class="sr">0A3E-</span><span class="se">\u</span><span class="sr">0A42</span><span class="se">\u</span><span class="sr">0A47</span><span class="se">\u</span><span class="sr">0A48</span><span class="se">\u</span><span class="sr">0A4B-</span><span class="se">\u</span><span class="sr">0A4D</span><span class="se">\u</span><span class="sr">0A51</span><span class="se">\u</span><span class="sr">0A70</span><span class="se">\u</span><span class="sr">0A71</span><span class="se">\u</span><span class="sr">0A75</span><span class="se">\u</span><span class="sr">0A81-</span><span class="se">\u</span><span class="sr">0A83</span><span class="se">\u</span><span class="sr">0ABC</span><span class="se">\u</span><span class="sr">0ABE-</span><span class="se">\u</span><span class="sr">0AC5</span><span class="se">\u</span><span class="sr">0AC7-</span><span class="se">\u</span><span class="sr">0AC9</span><span class="se">\u</span><span class="sr">0ACB-</span><span class="se">\u</span><span class="sr">0ACD</span><span class="se">\u</span><span class="sr">0AE2</span><span class="se">\u</span><span class="sr">0AE3</span><span class="se">\u</span><span class="sr">0B01-</span><span class="se">\u</span><span class="sr">0B03</span><span class="se">\u</span><span class="sr">0B3C</span><span class="se">\u</span><span class="sr">0B3E-</span><span class="se">\u</span><span class="sr">0B44</span><span class="se">\u</span><span class="sr">0B47</span><span class="se">\u</span><span class="sr">0B48</span><span class="se">\u</span><span class="sr">0B4B-</span><span class="se">\u</span><span class="sr">0B4D</span><span class="se">\u</span><span class="sr">0B56</span><span class="se">\u</span><span class="sr">0B57</span><span class="se">\u</span><span class="sr">0B62</span><span class="se">\u</span><span class="sr">0B63</span><span class="se">\u</span><span class="sr">0B82</span><span class="se">\u</span><span class="sr">0BBE-</span><span class="se">\u</span><span class="sr">0BC2</span><span class="se">\u</span><span class="sr">0BC6-</span><span class="se">\u</span><span class="sr">0BC8</span><span class="se">\u</span><span class="sr">0BCA-</span><span class="se">\u</span><span class="sr">0BCD</span><span class="se">\u</span><span class="sr">0BD7</span><span class="se">\u</span><span class="sr">0C01-</span><span class="se">\u</span><span class="sr">0C03</span><span class="se">\u</span><span class="sr">0C3E-</span><span class="se">\u</span><span class="sr">0C44</span><span class="se">\u</span><span class="sr">0C46-</span><span class="se">\u</span><span class="sr">0C48</span><span class="se">\u</span><span class="sr">0C4A-</span><span class="se">\u</span><span class="sr">0C4D</span><span class="se">\u</span><span class="sr">0C55</span><span class="se">\u</span><span class="sr">0C56</span><span class="se">\u</span><span class="sr">0C62</span><span class="se">\u</span><span class="sr">0C63</span><span class="se">\u</span><span class="sr">0C82</span><span class="se">\u</span><span class="sr">0C83</span><span class="se">\u</span><span class="sr">0CBC</span><span class="se">\u</span><span class="sr">0CBE-</span><span class="se">\u</span><span class="sr">0CC4</span><span class="se">\u</span><span class="sr">0CC6-</span><span class="se">\u</span><span class="sr">0CC8</span><span class="se">\u</span><span class="sr">0CCA-</span><span class="se">\u</span><span class="sr">0CCD</span><span class="se">\u</span><span class="sr">0CD5</span><span class="se">\u</span><span class="sr">0CD6</span><span class="se">\u</span><span class="sr">0CE2</span><span class="se">\u</span><span class="sr">0CE3</span><span class="se">\u</span><span class="sr">0D02</span><span class="se">\u</span><span class="sr">0D03</span><span class="se">\u</span><span class="sr">0D3E-</span><span class="se">\u</span><span class="sr">0D44</span><span class="se">\u</span><span class="sr">0D46-</span><span class="se">\u</span><span class="sr">0D48</span><span class="se">\u</span><span class="sr">0D4A-</span><span class="se">\u</span><span class="sr">0D4D</span><span class="se">\u</span><span class="sr">0D57</span><span class="se">\u</span><span class="sr">0D62</span><span class="se">\u</span><span class="sr">0D63</span><span class="se">\u</span><span class="sr">0D82</span><span class="se">\u</span><span class="sr">0D83</span><span class="se">\u</span><span class="sr">0DCA</span><span class="se">\u</span><span class="sr">0DCF-</span><span class="se">\u</span><span class="sr">0DD4</span><span class="se">\u</span><span class="sr">0DD6</span><span class="se">\u</span><span class="sr">0DD8-</span><span class="se">\u</span><span class="sr">0DDF</span><span class="se">\u</span><span class="sr">0DF2</span><span class="se">\u</span><span class="sr">0DF3</span><span class="se">\u</span><span class="sr">0E31</span><span class="se">\u</span><span class="sr">0E34-</span><span class="se">\u</span><span class="sr">0E3A</span><span class="se">\u</span><span class="sr">0E47-</span><span class="se">\u</span><span class="sr">0E4E</span><span class="se">\u</span><span class="sr">0EB1</span><span class="se">\u</span><span class="sr">0EB4-</span><span class="se">\u</span><span class="sr">0EB9</span><span class="se">\u</span><span class="sr">0EBB</span><span class="se">\u</span><span class="sr">0EBC</span><span class="se">\u</span><span class="sr">0EC8-</span><span class="se">\u</span><span class="sr">0ECD</span><span class="se">\u</span><span class="sr">0F18</span><span class="se">\u</span><span class="sr">0F19</span><span class="se">\u</span><span class="sr">0F35</span><span class="se">\u</span><span class="sr">0F37</span><span class="se">\u</span><span class="sr">0F39</span><span class="se">\u</span><span class="sr">0F3E</span><span class="se">\u</span><span class="sr">0F3F</span><span class="se">\u</span><span class="sr">0F71-</span><span class="se">\u</span><span class="sr">0F84</span><span class="se">\u</span><span class="sr">0F86</span><span class="se">\u</span><span class="sr">0F87</span><span class="se">\u</span><span class="sr">0F90-</span><span class="se">\u</span><span class="sr">0F97</span><span class="se">\u</span><span class="sr">0F99-</span><span class="se">\u</span><span class="sr">0FBC</span><span class="se">\u</span><span class="sr">0FC6</span><span class="se">\u</span><span class="sr">102B-</span><span class="se">\u</span><span class="sr">103E</span><span class="se">\u</span><span class="sr">1056-</span><span class="se">\u</span><span class="sr">1059</span><span class="se">\u</span><span class="sr">105E-</span><span class="se">\u</span><span class="sr">1060</span><span class="se">\u</span><span class="sr">1062-</span><span class="se">\u</span><span class="sr">1064</span><span class="se">\u</span><span class="sr">1067-</span><span class="se">\u</span><span class="sr">106D</span><span class="se">\u</span><span class="sr">1071-</span><span class="se">\u</span><span class="sr">1074</span><span class="se">\u</span><span class="sr">1082-</span><span class="se">\u</span><span class="sr">108D</span><span class="se">\u</span><span class="sr">108F</span><span class="se">\u</span><span class="sr">135F</span><span class="se">\u</span><span class="sr">1712-</span><span class="se">\u</span><span class="sr">1714</span><span class="se">\u</span><span class="sr">1732-</span><span class="se">\u</span><span class="sr">1734</span><span class="se">\u</span><span class="sr">1752</span><span class="se">\u</span><span class="sr">1753</span><span class="se">\u</span><span class="sr">1772</span><span class="se">\u</span><span class="sr">1773</span><span class="se">\u</span><span class="sr">17B6-</span><span class="se">\u</span><span class="sr">17D3</span><span class="se">\u</span><span class="sr">17DD</span><span class="se">\u</span><span class="sr">180B-</span><span class="se">\u</span><span class="sr">180D</span><span class="se">\u</span><span class="sr">18A9</span><span class="se">\u</span><span class="sr">1920-</span><span class="se">\u</span><span class="sr">192B</span><span class="se">\u</span><span class="sr">1930-</span><span class="se">\u</span><span class="sr">193B</span><span class="se">\u</span><span class="sr">19B0-</span><span class="se">\u</span><span class="sr">19C0</span><span class="se">\u</span><span class="sr">19C8</span><span class="se">\u</span><span class="sr">19C9</span><span class="se">\u</span><span class="sr">1A17-</span><span class="se">\u</span><span class="sr">1A1B</span><span class="se">\u</span><span class="sr">1B00-</span><span class="se">\u</span><span class="sr">1B04</span><span class="se">\u</span><span class="sr">1B34-</span><span class="se">\u</span><span class="sr">1B44</span><span class="se">\u</span><span class="sr">1B6B-</span><span class="se">\u</span><span class="sr">1B73</span><span class="se">\u</span><span class="sr">1B80-</span><span class="se">\u</span><span class="sr">1B82</span><span class="se">\u</span><span class="sr">1BA1-</span><span class="se">\u</span><span class="sr">1BAA</span><span class="se">\u</span><span class="sr">1C24-</span><span class="se">\u</span><span class="sr">1C37</span><span class="se">\u</span><span class="sr">1DC0-</span><span class="se">\u</span><span class="sr">1DE6</span><span class="se">\u</span><span class="sr">1DFE</span><span class="se">\u</span><span class="sr">1DFF</span><span class="se">\u</span><span class="sr">20D0-</span><span class="se">\u</span><span class="sr">20F0</span><span class="se">\u</span><span class="sr">2DE0-</span><span class="se">\u</span><span class="sr">2DFF</span><span class="se">\u</span><span class="sr">302A-</span><span class="se">\u</span><span class="sr">302F</span><span class="se">\u</span><span class="sr">3099</span><span class="se">\u</span><span class="sr">309A</span><span class="se">\u</span><span class="sr">A66F-</span><span class="se">\u</span><span class="sr">A672</span><span class="se">\u</span><span class="sr">A67C</span><span class="se">\u</span><span class="sr">A67D</span><span class="se">\u</span><span class="sr">A802</span><span class="se">\u</span><span class="sr">A806</span><span class="se">\u</span><span class="sr">A80B</span><span class="se">\u</span><span class="sr">A823-</span><span class="se">\u</span><span class="sr">A827</span><span class="se">\u</span><span class="sr">A880</span><span class="se">\u</span><span class="sr">A881</span><span class="se">\u</span><span class="sr">A8B4-</span><span class="se">\u</span><span class="sr">A8C4</span><span class="se">\u</span><span class="sr">A926-</span><span class="se">\u</span><span class="sr">A92D</span><span class="se">\u</span><span class="sr">A947-</span><span class="se">\u</span><span class="sr">A953</span><span class="se">\u</span><span class="sr">AA29-</span><span class="se">\u</span><span class="sr">AA36</span><span class="se">\u</span><span class="sr">AA43</span><span class="se">\u</span><span class="sr">AA4C</span><span class="se">\u</span><span class="sr">AA4D</span><span class="se">\u</span><span class="sr">FB1E</span><span class="se">\u</span><span class="sr">FE00-</span><span class="se">\u</span><span class="sr">FE0F</span><span class="se">\u</span><span class="sr">FE20-</span><span class="se">\u</span><span class="sr">FE26</span><span class="se">]</span><span class="sr">+</span><span class="se">)</span><span class="sr">/g</span>
+  <span class="c1">// Temporarily reverse</span>
+  <span class="nx">string</span> <span class="o">=</span> <span class="nx">string</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">grapheme_extend</span><span class="p">,</span> <span class="s1">'$2$1'</span><span class="p">)</span>
+  <span class="k">return</span> <span class="nx">string</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">reverse</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<a class="basic-alignment left themebutton" href="https://github.com/kvz/phpjs/blob/master/functions/strings/strrev.js">View on GitHub</a>
+<a class="basic-alignment left themebutton" href="https://github.com/kvz/phpjs/edit/master/functions/strings/strrev.js">Edit on GitHub</a>
+<a class="basic-alignment left themebutton" href="https://raw.githubusercontent.com/kvz/phpjs/master/functions/strings/strrev.js">Source on GitHub</a>
+
+<div class="clearfix"></div>
+
+
+
+
+<h2>A community initiative</h2>
+<p>
+  php.js offers community built functions and goes by the
+  <a href="https://medium.com/what-i-learned-building/9216e1c9da7d">McDonald’s Theory</a>.
+  We’ll put online functions that aren't perfect, in the hopes to spark better contributions.
+  Do you have one? You can directly edit this file on GitHub, this will create a Pull Request that
+  the core team can review, and merge into our codebase.
+</p>
+<p>
+  This way of working also means that we don't offer any
+  production guarantees, and recommend to use php.js inspiration
+  and learning purposes only.
+</p>
+
+
+
+
+
+
+  
+    <h2>Example 1</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">strrev</span><span class="p">(</span><span class="s1">'Kevin van Zonneveld'</span><span class="p">);</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s1">'dlevennoZ nav niveK'</span></code></pre></figure>
+  
+    <h2>Example 2</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">strrev</span><span class="p">(</span><span class="s1">'a\u0301haB'</span><span class="p">)</span> <span class="o">===</span> <span class="s1">'Baha\u0301'</span><span class="p">;</span> <span class="c1">// combining</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kc">true</span></code></pre></figure>
+  
+    <h2>Example 3</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">strrev</span><span class="p">(</span><span class="s1">'A\uD87E\uDC04Z'</span><span class="p">)</span> <span class="o">===</span> <span class="s1">'Z\uD87E\uDC04A'</span><span class="p">;</span> <span class="c1">// surrogates</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kc">true</span></code></pre></figure>
+  
+
+
+<p>
+  <a class="basic-alignment left themebutton" href="/functions/#strings">&laquo; More strings functions</a>
+</p>
+
+  </article>
+</div>
+
+
+
+      <aside class="sidebar">
+        <section>
+  <h1>Advertisement</h1>
+  <div id="carbonads-container" style="padding-top: 20px !important; padding-left: 40px !important; ">
+    <div class="carbonad">
+      <div id="azcarbon"></div>
+      <script type="text/javascript">
+        var z = document.createElement("script");
+        z.type = "text/javascript";
+        z.async = true;
+        z.src = "http://engine.carbonads.com/z/55999/azcarbon_2_1_0_VERT";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(z, s);
+      </script>
+    </div>
+  </div>
+
+  <h1>Uploading &amp; Encoding</h1>
+  <p>
+    Struggling with file uploads?
+    <a title="File uploading &amp; encoding service" style="color: #3464a4;" href="https://transloadit.com">Transloadit</a>
+    deals with progress bars, encoding, resizing, and storing, so you can focus on your web/app. It's pretty sweet.
+  </p>
+</section>
+
+<!-- Generated by Rakefile:build -->
+<section>
+  <h1>Categories</h1>
+  <ul id='category-list'>
+    
+    
+    <li><a href="/functions/#array">array</a> (75)</li>
+    
+    <li><a href="/functions/#bc">bc</a> (7)</li>
+    
+    <li><a href="/functions/#ctype">ctype</a> (11)</li>
+    
+    <li><a href="/functions/#datetime">datetime</a> (15)</li>
+    
+    <li><a href="/functions/#exec">exec</a> (1)</li>
+    
+    <li><a href="/functions/#filesystem">filesystem</a> (5)</li>
+    
+    <li><a href="/functions/#funchand">funchand</a> (5)</li>
+    
+    <li><a href="/functions/#i18n">i18n</a> (2)</li>
+    
+    <li><a href="/functions/#info">info</a> (7)</li>
+    
+    <li><a href="/functions/#json">json</a> (3)</li>
+    
+    <li><a href="/functions/#math">math</a> (46)</li>
+    
+    <li><a href="/functions/#misc">misc</a> (3)</li>
+    
+    <li><a href="/functions/#net-gopher">net-gopher</a> (1)</li>
+    
+    <li><a href="/functions/#network">network</a> (6)</li>
+    
+    <li><a href="/functions/#pcre">pcre</a> (3)</li>
+    
+    <li><a href="/functions/#strings">strings</a> (91)</li>
+    
+    <li><a href="/functions/#url">url</a> (10)</li>
+    
+    <li><a href="/functions/#var">var</a> (31)</li>
+    
+    <li><a href="/functions/#xdiff">xdiff</a> (2)</li>
+    
+    <li><a href="/functions/#xml">xml</a> (2)</li>
+    
+  </ul>
+</section>
+<section>
+  <h1>On the githubs</h1>
+  <ul class="on-the-githubs" data-event-source="repos/kvz/phpjs">Loading...</ul>
+  <br />
+  <br />
+</section>
+
+
+<section>
+  <h1>Badges</h1>
+
+  <p>
+    <a href="http://travis-ci.org/kvz/phpjs"><img src="https://secure.travis-ci.org/kvz/phpjs.png?branch=master" /></a>
+    <br />
+    <a href="https://npmjs.org/package/phpjs"><img src="http://badge.fury.io/js/phpjs.png" /></a>
+    <br />
+    <a href="https://david-dm.org/kvz/phpjs"><img src="https://david-dm.org/kvz/phpjs.png?theme=shields.io" /></a>
+    <br />
+    <a href="https://david-dm.org/kvz/phpjs#info=devDependencies"><img src="https://david-dm.org/kvz/phpjs/dev-status.png?theme=shields.io" /></a>
+    <br />
+  </p>
+
+  <h1>Sponsor development</h1>
+
+  <p>
+    <a href="https://www.gittip.com/kvz/"><img src="http://img.shields.io/gittip/kvz.png?color=green" /></a>
+    <br />
+    <a href="https://flattr.com/submit/auto?user_id=kvz&url=https://github.com/kvz/phpjs&title=phpjs&language=&tags=github&category=software"><img src="http://img.shields.io/flattr/donate.png?color=green" /></a>
+    <br />
+    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=kevin%40vanzonneveld%2enet&lc=NL&item_name=Open%20source%20donation%20to%20Kevin%20van%20Zonneveld&currency_code=USD&bn=PP-DonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><img src="http://img.shields.io/paypal/donate.png?color=green" /></a>
+    <br />
+    <a href="https://coinbase.com/checkouts/19BtCjLCboRgTAXiaEvnvkdoRyjd843Dg2"><img src="http://img.shields.io/bitcoin/donate.png?color=green" /></a>
+    <br />
+  </p>
+</section>
+
+      </aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo">
+    <p>
+      Copyright &copy; 2007-2016 - <a href="http://twitter.com/kvz">Kevin van Zonneveld</a> and <a href="/authors/">contributors</a> -
+      <span class="credit">Powered by <a href="http://jekyllrb.com">Jekyll</a></span> -
+      <span class="credit">Theme by <a href="http://melandri.net/2012/07/23/darkstripes-octopress-theme-released/">alessandro melandri</a></span>
+    </p>
+
+  </footer>
+
+  <script data-meta="js.app" src="/assets/build/app.js"></script>
+
+  <script src="//kvz.github.io/on-the-githubs/js/jquery.on-the-githubs.min.js"></script>
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.on-the-githubs').onthegithubs();
+      // If you use bootstrap and want to enable tooltips
+      // $('a[rel]').tooltip();
+    })
+  </script>
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-63083-7']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script');
+      ga.type = 'text/javascript';
+      ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</body>
+</html>

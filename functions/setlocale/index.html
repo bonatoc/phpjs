@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <title> - php.js</title>
+  <meta name="author" content="Kevin van Zonneveld">
+
+
+  <meta name="description" content="php.js is a resource that offers community-built JavaScript alternatives to PHP functions.">
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <link rel="canonical" href="http://phpjs.org/about/">
+  <link href="/favicon.ico" rel="shortcut icon">
+  <link href="//kvz.github.io/on-the-githubs/css/on-the-githubs.min.css" rel="stylesheet" />
+  <link data-meta="css.app" href="/assets/build/app.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script data-meta="js.head" src="/assets/build/head.js"></script>
+  <link href="/atom.xml" rel="alternate" title="php.js" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+  <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+</head>
+
+<a target="_blank" href="https://github.com/kvz/phpjs">
+  <img id="fork-us" style="position: absolute; z-index: 99; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub">
+</a>
+
+<body>
+  <header role="banner">
+    <hgroup>
+      <div id="logo">
+        <h1><a href="/"><span>php</span><span>.js</span></a></h1>
+        <div class="clear"></div>
+      </div>
+
+      <h2>Learn how to do it in JavaScript. Explore boundaries porting languages. Enjoy functions that turn out to be useful.</h2>
+
+      <div class="clear"></div>
+    </hgroup>
+
+  </header>
+  <nav role="navigation">
+    <ul class="subscription" data-subscription="rss">
+      <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+
+    </ul>
+
+    <form action="http://google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:phpjs.org" />
+        <input class="search" type="text" name="q" results="0" placeholder="Search" />
+      </fieldset>
+    </form>
+
+    <ul class="main-navigation">
+      <li><a href="/about/">About</a></li>
+      <li><a href="/blog/archives/">Blog</a></li>
+      <li><a href="/functions/">Functions</a></li>
+      <li><a href="/authors/">Authors</a></li>
+      <li><a href="https://github.com/kvz/phpjs">GitHub</a></li>
+    </ul>
+
+  </nav>
+  <div id="main">
+    <div id="content">
+
+      <div>
+  <article role="article">
+    
+    <p>
+  Here’s what a JavaScript equivalent for
+  <a href="http://php.net/manual/en/function.setlocale.php">PHP’s setlocale</a>
+  looks like.
+</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">setlocale</span> <span class="p">(</span><span class="nx">category</span><span class="p">,</span> <span class="nx">locale</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//  discuss at: http://phpjs.org/functions/setlocale/</span>
+  <span class="c1">// original by: Brett Zamir (http://brett-zamir.me)</span>
+  <span class="c1">// original by: Blues (http://hacks.bluesmoon.info/strftime/strftime.js)</span>
+  <span class="c1">// original by: YUI Library (http://developer.yahoo.com/yui/docs/YAHOO.util.DateLocale.html)</span>
+  <span class="c1">//  depends on: getenv</span>
+  <span class="c1">//        note: Is extensible, but currently only implements locales en,</span>
+  <span class="c1">//        note: en_US, en_GB, en_AU, fr, and fr_CA for LC_TIME only; C for LC_CTYPE;</span>
+  <span class="c1">//        note: C and en for LC_MONETARY/LC_NUMERIC; en for LC_COLLATE</span>
+  <span class="c1">//        note: Uses global: php_js to store locale info</span>
+  <span class="c1">//        note: Consider using http://demo.icu-project.org/icu-bin/locexp as basis for localization (as in i18n_loc_set_default())</span>
+  <span class="c1">//   example 1: setlocale('LC_ALL', 'en_US');</span>
+  <span class="c1">//   returns 1: 'en_US'</span>
+
+  <span class="kd">var</span> <span class="nx">categ</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span>
+    <span class="nx">cats</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nb">document</span>
+
+  <span class="c1">// BEGIN STATIC</span>
+  <span class="kd">var</span> <span class="nx">_copy</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">_copy</span> <span class="p">(</span><span class="nx">orig</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">orig</span> <span class="k">instanceof</span> <span class="nb">RegExp</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">orig</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">orig</span> <span class="k">instanceof</span> <span class="nb">Date</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">orig</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">newObj</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">orig</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">orig</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="s1">'object'</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">newObj</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">_copy</span><span class="p">(</span><span class="nx">orig</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">newObj</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">orig</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">newObj</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Function usable by a ngettext implementation (apparently not an accessible part of setlocale(), but locale-specific)</span>
+  <span class="c1">// See http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms though amended with others from</span>
+  <span class="c1">// https://developer.mozilla.org/En/Localization_and_Plurals (new categories noted with "MDC" below, though</span>
+  <span class="c1">// not sure of whether there is a convention for the relative order of these newer groups as far as ngettext)</span>
+  <span class="c1">// The function name indicates the number of plural forms (nplural)</span>
+  <span class="c1">// Need to look into http://cldr.unicode.org/ (maybe future JavaScript); Dojo has some functions (under new BSD),</span>
+  <span class="c1">// including JSON conversions of LDML XML from CLDR: http://bugs.dojotoolkit.org/browser/dojo/trunk/cldr</span>
+  <span class="c1">// and docs at http://api.dojotoolkit.org/jsdoc/HEAD/dojo.cldr</span>
+  <span class="kd">var</span> <span class="nx">_nplurals1</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., Japanese</span>
+    <span class="k">return</span> <span class="mi">0</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals2a</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., English</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">!==</span> <span class="mi">1</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">0</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals2b</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., French</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">0</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals2c</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., Icelandic (MDC)</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">!==</span> <span class="mi">11</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="mi">1</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals3a</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., Latvian (MDC has a different order from gettext)</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">!==</span> <span class="mi">11</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">!==</span> <span class="mi">0</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">2</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals3b</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., Scottish Gaelic</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">2</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">2</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals3c</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., Romanian</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="nx">n</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">||</span> <span class="p">(</span><span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">))</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">2</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals3d</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., Lithuanian (MDC has a different order from gettext)</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">!==</span> <span class="mi">11</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">||</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&gt;=</span> <span class="mi">20</span><span class="p">)</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">2</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals3e</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., Croatian</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">!==</span> <span class="mi">11</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">&lt;=</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">||</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&gt;=</span> <span class="mi">20</span><span class="p">)</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span>
+      <span class="mi">2</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals3f</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., Slovak</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">&lt;=</span> <span class="mi">4</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">2</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals3g</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., Polish</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">&lt;=</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">||</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&gt;=</span> <span class="mi">20</span><span class="p">)</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">2</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals3h</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., Macedonian (MDC)</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">===</span> <span class="mi">1</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">===</span> <span class="mi">2</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">2</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals4a</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., Slovenian</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">===</span> <span class="mi">1</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">===</span> <span class="mi">2</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">===</span> <span class="mi">3</span> <span class="o">||</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">===</span> <span class="mi">4</span> <span class="p">?</span> <span class="mi">2</span> <span class="p">:</span> <span class="mi">3</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals4b</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., Maltese (MDC)</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">||</span> <span class="p">(</span><span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">)</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&gt;=</span> <span class="mi">11</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&lt;=</span> <span class="mi">19</span> <span class="p">?</span> <span class="mi">2</span> <span class="p">:</span> <span class="mi">3</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals5</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., Irish Gaeilge (MDC)</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">2</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">&lt;=</span> <span class="mi">6</span> <span class="p">?</span> <span class="mi">2</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">&gt;=</span> <span class="mi">7</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="p">?</span> <span class="mi">3</span> <span class="p">:</span> <span class="mi">4</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_nplurals6</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// e.g., Arabic (MDC) - Per MDC puts 0 as last group</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">0</span> <span class="p">?</span> <span class="mi">5</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">2</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="p">?</span> <span class="mi">2</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&gt;=</span> <span class="mi">11</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&lt;=</span>
+      <span class="mi">99</span> <span class="p">?</span> <span class="mi">3</span> <span class="p">:</span> <span class="mi">4</span>
+  <span class="p">}</span>
+  <span class="c1">// END STATIC</span>
+  <span class="c1">// BEGIN REDUNDANT</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span> <span class="o">||</span> <span class="p">{}</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">phpjs</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span>
+
+  <span class="c1">// Reconcile Windows vs. *nix locale names?</span>
+  <span class="c1">// Allow different priority orders of languages, esp. if implement gettext as in</span>
+  <span class="c1">//     LANGUAGE env. var.? (e.g., show German if French is not available)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Can add to the locales</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s1">'LC_COLLATE'</span><span class="p">:</span> <span class="c1">// For strcoll</span>
+
+        <span class="kd">function</span> <span class="p">(</span><span class="nx">str1</span><span class="p">,</span> <span class="nx">str2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Fix: This one taken from strcmp, but need for other locales; we don't use localeCompare since its locale is not settable</span>
+          <span class="k">return</span> <span class="p">(</span><span class="nx">str1</span> <span class="o">==</span> <span class="nx">str2</span><span class="p">)</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="p">((</span><span class="nx">str1</span> <span class="o">&gt;</span> <span class="nx">str2</span><span class="p">)</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">},</span>
+      <span class="s1">'LC_CTYPE'</span><span class="p">:</span> <span class="p">{</span>
+        <span class="c1">// Need to change any of these for English as opposed to C?</span>
+        <span class="nl">an</span><span class="p">:</span> <span class="sr">/^</span><span class="se">[</span><span class="sr">A-Za-z</span><span class="se">\d]</span><span class="sr">+$/g</span><span class="p">,</span>
+        <span class="na">al</span><span class="p">:</span> <span class="sr">/^</span><span class="se">[</span><span class="sr">A-Za-z</span><span class="se">]</span><span class="sr">+$/g</span><span class="p">,</span>
+        <span class="na">ct</span><span class="p">:</span> <span class="sr">/^</span><span class="se">[\u</span><span class="sr">0000-</span><span class="se">\u</span><span class="sr">001F</span><span class="se">\u</span><span class="sr">007F</span><span class="se">]</span><span class="sr">+$/g</span><span class="p">,</span>
+        <span class="na">dg</span><span class="p">:</span> <span class="sr">/^</span><span class="se">[\d]</span><span class="sr">+$/g</span><span class="p">,</span>
+        <span class="na">gr</span><span class="p">:</span> <span class="sr">/^</span><span class="se">[\u</span><span class="sr">0021-</span><span class="se">\u</span><span class="sr">007E</span><span class="se">]</span><span class="sr">+$/g</span><span class="p">,</span>
+        <span class="na">lw</span><span class="p">:</span> <span class="sr">/^</span><span class="se">[</span><span class="sr">a-z</span><span class="se">]</span><span class="sr">+$/g</span><span class="p">,</span>
+        <span class="na">pr</span><span class="p">:</span> <span class="sr">/^</span><span class="se">[\u</span><span class="sr">0020-</span><span class="se">\u</span><span class="sr">007E</span><span class="se">]</span><span class="sr">+$/g</span><span class="p">,</span>
+        <span class="na">pu</span><span class="p">:</span> <span class="sr">/^</span><span class="se">[\u</span><span class="sr">0021-</span><span class="se">\u</span><span class="sr">002F</span><span class="se">\u</span><span class="sr">003A-</span><span class="se">\u</span><span class="sr">0040</span><span class="se">\u</span><span class="sr">005B-</span><span class="se">\u</span><span class="sr">0060</span><span class="se">\u</span><span class="sr">007B-</span><span class="se">\u</span><span class="sr">007E</span><span class="se">]</span><span class="sr">+$/g</span><span class="p">,</span>
+        <span class="na">sp</span><span class="p">:</span> <span class="sr">/^</span><span class="se">[\f\n\r\t\v</span><span class="sr"> </span><span class="se">]</span><span class="sr">+$/g</span><span class="p">,</span>
+        <span class="na">up</span><span class="p">:</span> <span class="sr">/^</span><span class="se">[</span><span class="sr">A-Z</span><span class="se">]</span><span class="sr">+$/g</span><span class="p">,</span>
+        <span class="na">xd</span><span class="p">:</span> <span class="sr">/^</span><span class="se">[</span><span class="sr">A-Fa-f</span><span class="se">\d]</span><span class="sr">+$/g</span><span class="p">,</span>
+        <span class="na">CODESET</span><span class="p">:</span> <span class="s1">'UTF-8'</span><span class="p">,</span>
+        <span class="c1">// Used by sql_regcase</span>
+        <span class="na">lower</span><span class="p">:</span> <span class="s1">'abcdefghijklmnopqrstuvwxyz'</span><span class="p">,</span>
+        <span class="na">upper</span><span class="p">:</span> <span class="s1">'ABCDEFGHIJKLMNOPQRSTUVWXYZ'</span>
+      <span class="p">},</span>
+      <span class="s1">'LC_TIME'</span><span class="err">:</span> <span class="p">{</span>
+        <span class="c1">// Comments include nl_langinfo() constant equivalents and any changes from Blues' implementation</span>
+        <span class="nl">a</span><span class="p">:</span> <span class="p">[</span><span class="s1">'Sun'</span><span class="p">,</span> <span class="s1">'Mon'</span><span class="p">,</span> <span class="s1">'Tue'</span><span class="p">,</span> <span class="s1">'Wed'</span><span class="p">,</span> <span class="s1">'Thu'</span><span class="p">,</span> <span class="s1">'Fri'</span><span class="p">,</span> <span class="s1">'Sat'</span><span class="p">],</span>
+        <span class="c1">// ABDAY_</span>
+        <span class="nx">A</span><span class="err">:</span> <span class="p">[</span><span class="s1">'Sunday'</span><span class="p">,</span> <span class="s1">'Monday'</span><span class="p">,</span> <span class="s1">'Tuesday'</span><span class="p">,</span> <span class="s1">'Wednesday'</span><span class="p">,</span> <span class="s1">'Thursday'</span><span class="p">,</span> <span class="s1">'Friday'</span><span class="p">,</span> <span class="s1">'Saturday'</span><span class="p">],</span>
+        <span class="c1">// DAY_</span>
+        <span class="nx">b</span><span class="err">:</span> <span class="p">[</span><span class="s1">'Jan'</span><span class="p">,</span> <span class="s1">'Feb'</span><span class="p">,</span> <span class="s1">'Mar'</span><span class="p">,</span> <span class="s1">'Apr'</span><span class="p">,</span> <span class="s1">'May'</span><span class="p">,</span> <span class="s1">'Jun'</span><span class="p">,</span> <span class="s1">'Jul'</span><span class="p">,</span> <span class="s1">'Aug'</span><span class="p">,</span> <span class="s1">'Sep'</span><span class="p">,</span> <span class="s1">'Oct'</span><span class="p">,</span> <span class="s1">'Nov'</span><span class="p">,</span> <span class="s1">'Dec'</span><span class="p">],</span>
+        <span class="c1">// ABMON_</span>
+        <span class="nx">B</span><span class="err">:</span> <span class="p">[</span><span class="s1">'January'</span><span class="p">,</span> <span class="s1">'February'</span><span class="p">,</span> <span class="s1">'March'</span><span class="p">,</span> <span class="s1">'April'</span><span class="p">,</span> <span class="s1">'May'</span><span class="p">,</span> <span class="s1">'June'</span><span class="p">,</span> <span class="s1">'July'</span><span class="p">,</span> <span class="s1">'August'</span><span class="p">,</span> <span class="s1">'September'</span><span class="p">,</span> <span class="s1">'October'</span><span class="p">,</span>
+          <span class="s1">'November'</span><span class="p">,</span> <span class="s1">'December'</span>
+        <span class="p">],</span>
+        <span class="c1">// MON_</span>
+        <span class="nx">c</span><span class="err">:</span> <span class="s1">'%a %d %b %Y %r %Z'</span><span class="p">,</span>
+        <span class="c1">// D_T_FMT // changed %T to %r per results</span>
+        <span class="nx">p</span><span class="err">:</span> <span class="p">[</span><span class="s1">'AM'</span><span class="p">,</span> <span class="s1">'PM'</span><span class="p">],</span>
+        <span class="c1">// AM_STR/PM_STR</span>
+        <span class="nx">P</span><span class="err">:</span> <span class="p">[</span><span class="s1">'am'</span><span class="p">,</span> <span class="s1">'pm'</span><span class="p">],</span>
+        <span class="c1">// Not available in nl_langinfo()</span>
+        <span class="nx">r</span><span class="err">:</span> <span class="s1">'%I:%M:%S %p'</span><span class="p">,</span>
+        <span class="c1">// T_FMT_AMPM (Fixed for all locales)</span>
+        <span class="nx">x</span><span class="err">:</span> <span class="s1">'%m/%d/%Y'</span><span class="p">,</span>
+        <span class="c1">// D_FMT // switched order of %m and %d; changed %y to %Y (C uses %y)</span>
+        <span class="nx">X</span><span class="err">:</span> <span class="s1">'%r'</span><span class="p">,</span>
+        <span class="c1">// T_FMT // changed from %T to %r  (%T is default for C, not English US)</span>
+        <span class="c1">// Following are from nl_langinfo() or http://www.cptec.inpe.br/sx4/sx4man2/g1ab02e/strftime.4.html</span>
+        <span class="nx">alt_digits</span><span class="err">:</span> <span class="s1">''</span><span class="p">,</span>
+        <span class="c1">// e.g., ordinal</span>
+        <span class="nx">ERA</span><span class="err">:</span> <span class="s1">''</span><span class="p">,</span>
+        <span class="nx">ERA_YEAR</span><span class="err">:</span> <span class="s1">''</span><span class="p">,</span>
+        <span class="nx">ERA_D_T_FMT</span><span class="err">:</span> <span class="s1">''</span><span class="p">,</span>
+        <span class="nx">ERA_D_FMT</span><span class="err">:</span> <span class="s1">''</span><span class="p">,</span>
+        <span class="nx">ERA_T_FMT</span><span class="err">:</span> <span class="s1">''</span>
+      <span class="p">},</span>
+      <span class="c1">// Assuming distinction between numeric and monetary is thus:</span>
+      <span class="c1">// See below for C locale</span>
+      <span class="s1">'LC_MONETARY'</span><span class="err">:</span> <span class="p">{</span>
+        <span class="c1">// based on Windows "english" (English_United States.1252) locale</span>
+        <span class="nl">int_curr_symbol</span><span class="p">:</span> <span class="s1">'USD'</span><span class="p">,</span>
+        <span class="nx">currency_symbol</span><span class="err">:</span> <span class="s1">'$'</span><span class="p">,</span>
+        <span class="nx">mon_decimal_point</span><span class="err">:</span> <span class="s1">'.'</span><span class="p">,</span>
+        <span class="nx">mon_thousands_sep</span><span class="err">:</span> <span class="s1">','</span><span class="p">,</span>
+        <span class="nx">mon_grouping</span><span class="err">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="c1">// use mon_thousands_sep; "" for no grouping; additional array members indicate successive group lengths after first group (e.g., if to be 1,23,456, could be [3, 2])</span>
+        <span class="nx">positive_sign</span><span class="err">:</span> <span class="s1">''</span><span class="p">,</span>
+        <span class="nx">negative_sign</span><span class="err">:</span> <span class="s1">'-'</span><span class="p">,</span>
+        <span class="nx">int_frac_digits</span><span class="err">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="c1">// Fractional digits only for money defaults?</span>
+        <span class="nx">frac_digits</span><span class="err">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="nx">p_cs_precedes</span><span class="err">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="c1">// positive currency symbol follows value = 0; precedes value = 1</span>
+        <span class="nx">p_sep_by_space</span><span class="err">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="c1">// 0: no space between curr. symbol and value; 1: space sep. them unless symb. and sign are adjacent then space sep. them from value; 2: space sep. sign and value unless symb. and sign are adjacent then space separates</span>
+        <span class="nx">n_cs_precedes</span><span class="err">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="c1">// see p_cs_precedes</span>
+        <span class="nx">n_sep_by_space</span><span class="err">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="c1">// see p_sep_by_space</span>
+        <span class="nx">p_sign_posn</span><span class="err">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="c1">// 0: parentheses surround quantity and curr. symbol; 1: sign precedes them; 2: sign follows them; 3: sign immed. precedes curr. symbol; 4: sign immed. succeeds curr. symbol</span>
+        <span class="nx">n_sign_posn</span><span class="err">:</span> <span class="mi">0</span> <span class="c1">// see p_sign_posn</span>
+      <span class="p">},</span>
+      <span class="s1">'LC_NUMERIC'</span><span class="err">:</span> <span class="p">{</span>
+        <span class="c1">// based on Windows "english" (English_United States.1252) locale</span>
+        <span class="nl">decimal_point</span><span class="p">:</span> <span class="s1">'.'</span><span class="p">,</span>
+        <span class="nx">thousands_sep</span><span class="err">:</span> <span class="s1">','</span><span class="p">,</span>
+        <span class="nx">grouping</span><span class="err">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="c1">// see mon_grouping, but for non-monetary values (use thousands_sep)</span>
+      <span class="p">},</span>
+      <span class="s1">'LC_MESSAGES'</span><span class="err">:</span> <span class="p">{</span>
+        <span class="nl">YESEXPR</span><span class="p">:</span> <span class="s1">'^[yY].*'</span><span class="p">,</span>
+        <span class="nx">NOEXPR</span><span class="err">:</span> <span class="s1">'^[nN].*'</span><span class="p">,</span>
+        <span class="nx">YESSTR</span><span class="err">:</span> <span class="s1">''</span><span class="p">,</span>
+        <span class="nx">NOSTR</span><span class="err">:</span> <span class="s1">''</span>
+      <span class="p">},</span>
+      <span class="nx">nplurals</span><span class="err">:</span> <span class="nx">_nplurals2a</span>
+    <span class="p">}</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en_US</span> <span class="o">=</span> <span class="nx">_copy</span><span class="p">(</span><span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en</span><span class="p">)</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en_US</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">c</span> <span class="o">=</span> <span class="s1">'%a %d %b %Y %r %Z'</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en_US</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="s1">'%D'</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en_US</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">X</span> <span class="o">=</span> <span class="s1">'%r'</span>
+    <span class="c1">// The following are based on *nix settings</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en_US</span><span class="p">.</span><span class="nx">LC_MONETARY</span><span class="p">.</span><span class="nx">int_curr_symbol</span> <span class="o">=</span> <span class="s1">'USD '</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en_US</span><span class="p">.</span><span class="nx">LC_MONETARY</span><span class="p">.</span><span class="nx">p_sign_posn</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en_US</span><span class="p">.</span><span class="nx">LC_MONETARY</span><span class="p">.</span><span class="nx">n_sign_posn</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en_US</span><span class="p">.</span><span class="nx">LC_MONETARY</span><span class="p">.</span><span class="nx">mon_grouping</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en_US</span><span class="p">.</span><span class="nx">LC_NUMERIC</span><span class="p">.</span><span class="nx">thousands_sep</span> <span class="o">=</span> <span class="s1">''</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en_US</span><span class="p">.</span><span class="nx">LC_NUMERIC</span><span class="p">.</span><span class="nx">grouping</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en_GB</span> <span class="o">=</span> <span class="nx">_copy</span><span class="p">(</span><span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en</span><span class="p">)</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en_GB</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">r</span> <span class="o">=</span> <span class="s1">'%l:%M:%S %P %Z'</span>
+
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en_AU</span> <span class="o">=</span> <span class="nx">_copy</span><span class="p">(</span><span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en_GB</span><span class="p">)</span>
+    <span class="c1">// Assume C locale is like English (?) (We need C locale for LC_CTYPE)</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">C</span> <span class="o">=</span> <span class="nx">_copy</span><span class="p">(</span><span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en</span><span class="p">)</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">C</span><span class="p">.</span><span class="nx">LC_CTYPE</span><span class="p">.</span><span class="nx">CODESET</span> <span class="o">=</span> <span class="s1">'ANSI_X3.4-1968'</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">C</span><span class="p">.</span><span class="nx">LC_MONETARY</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">int_curr_symbol</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+      <span class="na">currency_symbol</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+      <span class="na">mon_decimal_point</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+      <span class="na">mon_thousands_sep</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+      <span class="na">mon_grouping</span><span class="p">:</span> <span class="p">[],</span>
+      <span class="na">p_cs_precedes</span><span class="p">:</span> <span class="mi">127</span><span class="p">,</span>
+      <span class="na">p_sep_by_space</span><span class="p">:</span> <span class="mi">127</span><span class="p">,</span>
+      <span class="na">n_cs_precedes</span><span class="p">:</span> <span class="mi">127</span><span class="p">,</span>
+      <span class="na">n_sep_by_space</span><span class="p">:</span> <span class="mi">127</span><span class="p">,</span>
+      <span class="na">p_sign_posn</span><span class="p">:</span> <span class="mi">127</span><span class="p">,</span>
+      <span class="na">n_sign_posn</span><span class="p">:</span> <span class="mi">127</span><span class="p">,</span>
+      <span class="na">positive_sign</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+      <span class="na">negative_sign</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+      <span class="na">int_frac_digits</span><span class="p">:</span> <span class="mi">127</span><span class="p">,</span>
+      <span class="na">frac_digits</span><span class="p">:</span> <span class="mi">127</span>
+    <span class="p">}</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">C</span><span class="p">.</span><span class="nx">LC_NUMERIC</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">decimal_point</span><span class="p">:</span> <span class="s1">'.'</span><span class="p">,</span>
+      <span class="na">thousands_sep</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+      <span class="na">grouping</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">}</span>
+    <span class="c1">// D_T_FMT</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">C</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">c</span> <span class="o">=</span> <span class="s1">'%a %b %e %H:%M:%S %Y'</span>
+    <span class="c1">// D_FMT</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">C</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="s1">'%m/%d/%y'</span>
+    <span class="c1">// T_FMT</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">C</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">X</span> <span class="o">=</span> <span class="s1">'%H:%M:%S'</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">C</span><span class="p">.</span><span class="nx">LC_MESSAGES</span><span class="p">.</span><span class="nx">YESEXPR</span> <span class="o">=</span> <span class="s1">'^[yY]'</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">C</span><span class="p">.</span><span class="nx">LC_MESSAGES</span><span class="p">.</span><span class="nx">NOEXPR</span> <span class="o">=</span> <span class="s1">'^[nN]'</span>
+
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">fr</span> <span class="o">=</span> <span class="nx">_copy</span><span class="p">(</span><span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">en</span><span class="p">)</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">fr</span><span class="p">.</span><span class="nx">nplurals</span> <span class="o">=</span> <span class="nx">_nplurals2b</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">fr</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'dim'</span><span class="p">,</span> <span class="s1">'lun'</span><span class="p">,</span> <span class="s1">'mar'</span><span class="p">,</span> <span class="s1">'mer'</span><span class="p">,</span> <span class="s1">'jeu'</span><span class="p">,</span> <span class="s1">'ven'</span><span class="p">,</span> <span class="s1">'sam'</span><span class="p">]</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">fr</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">A</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'dimanche'</span><span class="p">,</span> <span class="s1">'lundi'</span><span class="p">,</span> <span class="s1">'mardi'</span><span class="p">,</span> <span class="s1">'mercredi'</span><span class="p">,</span> <span class="s1">'jeudi'</span><span class="p">,</span> <span class="s1">'vendredi'</span><span class="p">,</span> <span class="s1">'samedi'</span><span class="p">]</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">fr</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">b</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'jan'</span><span class="p">,</span> <span class="s1">'f\u00E9v'</span><span class="p">,</span> <span class="s1">'mar'</span><span class="p">,</span> <span class="s1">'avr'</span><span class="p">,</span> <span class="s1">'mai'</span><span class="p">,</span> <span class="s1">'jun'</span><span class="p">,</span> <span class="s1">'jui'</span><span class="p">,</span> <span class="s1">'ao\u00FB'</span><span class="p">,</span> <span class="s1">'sep'</span><span class="p">,</span> <span class="s1">'oct'</span><span class="p">,</span>
+      <span class="s1">'nov'</span><span class="p">,</span> <span class="s1">'d\u00E9c'</span>
+    <span class="p">]</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">fr</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">B</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'janvier'</span><span class="p">,</span> <span class="s1">'f\u00E9vrier'</span><span class="p">,</span> <span class="s1">'mars'</span><span class="p">,</span> <span class="s1">'avril'</span><span class="p">,</span> <span class="s1">'mai'</span><span class="p">,</span> <span class="s1">'juin'</span><span class="p">,</span> <span class="s1">'juillet'</span><span class="p">,</span> <span class="s1">'ao\u00FBt'</span><span class="p">,</span>
+      <span class="s1">'septembre'</span><span class="p">,</span> <span class="s1">'octobre'</span><span class="p">,</span> <span class="s1">'novembre'</span><span class="p">,</span> <span class="s1">'d\u00E9cembre'</span>
+    <span class="p">]</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">fr</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">c</span> <span class="o">=</span> <span class="s1">'%a %d %b %Y %T %Z'</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">fr</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">p</span> <span class="o">=</span> <span class="p">[</span><span class="s1">''</span><span class="p">,</span> <span class="s1">''</span><span class="p">]</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">fr</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">P</span> <span class="o">=</span> <span class="p">[</span><span class="s1">''</span><span class="p">,</span> <span class="s1">''</span><span class="p">]</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">fr</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="s1">'%d.%m.%Y'</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">fr</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">X</span> <span class="o">=</span> <span class="s1">'%T'</span>
+
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">fr_CA</span> <span class="o">=</span> <span class="nx">_copy</span><span class="p">(</span><span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">fr</span><span class="p">)</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">.</span><span class="nx">fr_CA</span><span class="p">.</span><span class="nx">LC_TIME</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="s1">'%Y-%m-%d'</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span> <span class="o">=</span> <span class="s1">'en_US'</span>
+    <span class="kd">var</span> <span class="nx">NS_XHTML</span> <span class="o">=</span> <span class="s1">'http://www.w3.org/1999/xhtml'</span>
+    <span class="kd">var</span> <span class="nx">NS_XML</span> <span class="o">=</span> <span class="s1">'http://www.w3.org/XML/1998/namespace'</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagNameNS</span> <span class="o">&amp;&amp;</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagNameNS</span><span class="p">(</span><span class="nx">NS_XHTML</span><span class="p">,</span> <span class="s1">'html'</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagNameNS</span><span class="p">(</span><span class="nx">NS_XHTML</span><span class="p">,</span> <span class="s1">'html'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">getAttributeNS</span> <span class="o">&amp;&amp;</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagNameNS</span><span class="p">(</span><span class="nx">NS_XHTML</span><span class="p">,</span>
+          <span class="s1">'html'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">getAttributeNS</span><span class="p">(</span><span class="nx">NS_XML</span><span class="p">,</span> <span class="s1">'lang'</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">NS_XHTML</span><span class="p">,</span> <span class="s1">'html'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">getAttributeNS</span><span class="p">(</span><span class="nx">NS_XML</span><span class="p">,</span> <span class="s1">'lang'</span><span class="p">)</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagNameNS</span><span class="p">(</span><span class="nx">NS_XHTML</span><span class="p">,</span> <span class="s1">'html'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">lang</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// XHTML 1.0 only</span>
+        <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagNameNS</span><span class="p">(</span><span class="nx">NS_XHTML</span><span class="p">,</span> <span class="s1">'html'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">lang</span>
+      <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">'html'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">'html'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">lang</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">'html'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">lang</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="c1">// PHP-style</span>
+  <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span> <span class="o">=</span> <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'-'</span><span class="p">,</span> <span class="s1">'_'</span><span class="p">)</span>
+  <span class="c1">// Fix locale if declared locale hasn't been defined</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span> <span class="k">in</span> <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/_</span><span class="se">[</span><span class="sr">a-zA-Z</span><span class="se">]</span><span class="sr">+$/</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span> <span class="k">in</span> <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locales</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span> <span class="o">=</span> <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/_</span><span class="se">[</span><span class="sr">a-zA-Z</span><span class="se">]</span><span class="sr">+$/</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">phpjs</span><span class="p">.</span><span class="nx">localeCategories</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">phpjs</span><span class="p">.</span><span class="nx">localeCategories</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s1">'LC_COLLATE'</span><span class="p">:</span> <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span><span class="p">,</span>
+      <span class="c1">// for string comparison, see strcoll()</span>
+      <span class="s1">'LC_CTYPE'</span><span class="p">:</span> <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span><span class="p">,</span>
+      <span class="c1">// for character classification and conversion, for example strtoupper()</span>
+      <span class="s1">'LC_MONETARY'</span><span class="p">:</span> <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span><span class="p">,</span>
+      <span class="c1">// for localeconv()</span>
+      <span class="s1">'LC_NUMERIC'</span><span class="p">:</span> <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span><span class="p">,</span>
+      <span class="c1">// for decimal separator (See also localeconv())</span>
+      <span class="s1">'LC_TIME'</span><span class="p">:</span> <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span><span class="p">,</span>
+      <span class="c1">// for date and time formatting with strftime()</span>
+      <span class="s1">'LC_MESSAGES'</span><span class="p">:</span> <span class="nx">phpjs</span><span class="p">.</span><span class="nx">locale</span> <span class="c1">// for system responses (available if PHP was compiled with libintl)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="c1">// END REDUNDANT</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">locale</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">||</span> <span class="nx">locale</span> <span class="o">===</span> <span class="s1">''</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">locale</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getenv</span><span class="p">(</span><span class="nx">category</span><span class="p">)</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">getenv</span><span class="p">(</span><span class="s1">'LANG'</span><span class="p">)</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">locale</span><span class="p">)</span> <span class="o">===</span> <span class="s1">'[object Array]'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">locale</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">locale</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span><span class="p">.</span><span class="nx">locales</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="nx">locale</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+          <span class="c1">// none found</span>
+          <span class="k">return</span> <span class="kc">false</span>
+        <span class="p">}</span>
+        <span class="k">continue</span>
+      <span class="p">}</span>
+      <span class="nx">locale</span> <span class="o">=</span> <span class="nx">locale</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+      <span class="k">break</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Just get the locale</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">locale</span> <span class="o">===</span> <span class="s1">'0'</span> <span class="o">||</span> <span class="nx">locale</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">category</span> <span class="o">===</span> <span class="s1">'LC_ALL'</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">for</span> <span class="p">(</span><span class="nx">categ</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span><span class="p">.</span><span class="nx">localeCategories</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Add ".UTF-8" or allow ".@latint", etc. to the end?</span>
+        <span class="nx">cats</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">categ</span> <span class="o">+</span> <span class="s1">'='</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span><span class="p">.</span><span class="nx">localeCategories</span><span class="p">[</span><span class="nx">categ</span><span class="p">])</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">cats</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">';'</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span><span class="p">.</span><span class="nx">localeCategories</span><span class="p">[</span><span class="nx">category</span><span class="p">]</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">locale</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span><span class="p">.</span><span class="nx">locales</span><span class="p">))</span> <span class="p">{</span>
+    <span class="c1">// Locale not found</span>
+    <span class="k">return</span> <span class="kc">false</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Set and get locale</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">category</span> <span class="o">===</span> <span class="s1">'LC_ALL'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nx">categ</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span><span class="p">.</span><span class="nx">localeCategories</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span><span class="p">.</span><span class="nx">localeCategories</span><span class="p">[</span><span class="nx">categ</span><span class="p">]</span> <span class="o">=</span> <span class="nx">locale</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">php_js</span><span class="p">.</span><span class="nx">localeCategories</span><span class="p">[</span><span class="nx">category</span><span class="p">]</span> <span class="o">=</span> <span class="nx">locale</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">locale</span>
+<span class="p">}</span></code></pre></figure>
+
+<a class="basic-alignment left themebutton" href="https://github.com/kvz/phpjs/blob/master/functions/strings/setlocale.js">View on GitHub</a>
+<a class="basic-alignment left themebutton" href="https://github.com/kvz/phpjs/edit/master/functions/strings/setlocale.js">Edit on GitHub</a>
+<a class="basic-alignment left themebutton" href="https://raw.githubusercontent.com/kvz/phpjs/master/functions/strings/setlocale.js">Source on GitHub</a>
+
+<div class="clearfix"></div>
+
+
+
+
+<h2>A community initiative</h2>
+<p>
+  php.js offers community built functions and goes by the
+  <a href="https://medium.com/what-i-learned-building/9216e1c9da7d">McDonald’s Theory</a>.
+  We’ll put online functions that aren't perfect, in the hopes to spark better contributions.
+  Do you have one? You can directly edit this file on GitHub, this will create a Pull Request that
+  the core team can review, and merge into our codebase.
+</p>
+<p>
+  This way of working also means that we don't offer any
+  production guarantees, and recommend to use php.js inspiration
+  and learning purposes only.
+</p>
+
+
+  <h2>Notes</h2>
+  
+    <p>Is extensible, but currently only implements locales en,
+en_US, en_GB, en_AU, fr, and fr_CA for LC_TIME only; C for LC_CTYPE;
+C and en for LC_MONETARY/LC_NUMERIC; en for LC_COLLATE
+Uses global: php_js to store locale info
+Consider using http://demo.icu-project.org/icu-bin/locexp as basis for localization (as in i18n_loc_set_default())</p>
+
+  
+
+
+
+  <h2>Dependencies</h2>
+
+  <ul>
+  
+    <li><a href="/functions/getenv">getenv</a></li>
+  
+  </ul>
+
+
+
+  
+    <h2>Example 1</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">setlocale</span><span class="p">(</span><span class="s1">'LC_ALL'</span><span class="p">,</span> <span class="s1">'en_US'</span><span class="p">);</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s1">'en_US'</span></code></pre></figure>
+  
+
+
+<p>
+  <a class="basic-alignment left themebutton" href="/functions/#strings">&laquo; More strings functions</a>
+</p>
+
+  </article>
+</div>
+
+
+
+      <aside class="sidebar">
+        <section>
+  <h1>Advertisement</h1>
+  <div id="carbonads-container" style="padding-top: 20px !important; padding-left: 40px !important; ">
+    <div class="carbonad">
+      <div id="azcarbon"></div>
+      <script type="text/javascript">
+        var z = document.createElement("script");
+        z.type = "text/javascript";
+        z.async = true;
+        z.src = "http://engine.carbonads.com/z/55999/azcarbon_2_1_0_VERT";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(z, s);
+      </script>
+    </div>
+  </div>
+
+  <h1>Uploading &amp; Encoding</h1>
+  <p>
+    Struggling with file uploads?
+    <a title="File uploading &amp; encoding service" style="color: #3464a4;" href="https://transloadit.com">Transloadit</a>
+    deals with progress bars, encoding, resizing, and storing, so you can focus on your web/app. It's pretty sweet.
+  </p>
+</section>
+
+<!-- Generated by Rakefile:build -->
+<section>
+  <h1>Categories</h1>
+  <ul id='category-list'>
+    
+    
+    <li><a href="/functions/#array">array</a> (75)</li>
+    
+    <li><a href="/functions/#bc">bc</a> (7)</li>
+    
+    <li><a href="/functions/#ctype">ctype</a> (11)</li>
+    
+    <li><a href="/functions/#datetime">datetime</a> (15)</li>
+    
+    <li><a href="/functions/#exec">exec</a> (1)</li>
+    
+    <li><a href="/functions/#filesystem">filesystem</a> (5)</li>
+    
+    <li><a href="/functions/#funchand">funchand</a> (5)</li>
+    
+    <li><a href="/functions/#i18n">i18n</a> (2)</li>
+    
+    <li><a href="/functions/#info">info</a> (7)</li>
+    
+    <li><a href="/functions/#json">json</a> (3)</li>
+    
+    <li><a href="/functions/#math">math</a> (46)</li>
+    
+    <li><a href="/functions/#misc">misc</a> (3)</li>
+    
+    <li><a href="/functions/#net-gopher">net-gopher</a> (1)</li>
+    
+    <li><a href="/functions/#network">network</a> (6)</li>
+    
+    <li><a href="/functions/#pcre">pcre</a> (3)</li>
+    
+    <li><a href="/functions/#strings">strings</a> (91)</li>
+    
+    <li><a href="/functions/#url">url</a> (10)</li>
+    
+    <li><a href="/functions/#var">var</a> (31)</li>
+    
+    <li><a href="/functions/#xdiff">xdiff</a> (2)</li>
+    
+    <li><a href="/functions/#xml">xml</a> (2)</li>
+    
+  </ul>
+</section>
+<section>
+  <h1>On the githubs</h1>
+  <ul class="on-the-githubs" data-event-source="repos/kvz/phpjs">Loading...</ul>
+  <br />
+  <br />
+</section>
+
+
+<section>
+  <h1>Badges</h1>
+
+  <p>
+    <a href="http://travis-ci.org/kvz/phpjs"><img src="https://secure.travis-ci.org/kvz/phpjs.png?branch=master" /></a>
+    <br />
+    <a href="https://npmjs.org/package/phpjs"><img src="http://badge.fury.io/js/phpjs.png" /></a>
+    <br />
+    <a href="https://david-dm.org/kvz/phpjs"><img src="https://david-dm.org/kvz/phpjs.png?theme=shields.io" /></a>
+    <br />
+    <a href="https://david-dm.org/kvz/phpjs#info=devDependencies"><img src="https://david-dm.org/kvz/phpjs/dev-status.png?theme=shields.io" /></a>
+    <br />
+  </p>
+
+  <h1>Sponsor development</h1>
+
+  <p>
+    <a href="https://www.gittip.com/kvz/"><img src="http://img.shields.io/gittip/kvz.png?color=green" /></a>
+    <br />
+    <a href="https://flattr.com/submit/auto?user_id=kvz&url=https://github.com/kvz/phpjs&title=phpjs&language=&tags=github&category=software"><img src="http://img.shields.io/flattr/donate.png?color=green" /></a>
+    <br />
+    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=kevin%40vanzonneveld%2enet&lc=NL&item_name=Open%20source%20donation%20to%20Kevin%20van%20Zonneveld&currency_code=USD&bn=PP-DonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><img src="http://img.shields.io/paypal/donate.png?color=green" /></a>
+    <br />
+    <a href="https://coinbase.com/checkouts/19BtCjLCboRgTAXiaEvnvkdoRyjd843Dg2"><img src="http://img.shields.io/bitcoin/donate.png?color=green" /></a>
+    <br />
+  </p>
+</section>
+
+      </aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo">
+    <p>
+      Copyright &copy; 2007-2016 - <a href="http://twitter.com/kvz">Kevin van Zonneveld</a> and <a href="/authors/">contributors</a> -
+      <span class="credit">Powered by <a href="http://jekyllrb.com">Jekyll</a></span> -
+      <span class="credit">Theme by <a href="http://melandri.net/2012/07/23/darkstripes-octopress-theme-released/">alessandro melandri</a></span>
+    </p>
+
+  </footer>
+
+  <script data-meta="js.app" src="/assets/build/app.js"></script>
+
+  <script src="//kvz.github.io/on-the-githubs/js/jquery.on-the-githubs.min.js"></script>
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.on-the-githubs').onthegithubs();
+      // If you use bootstrap and want to enable tooltips
+      // $('a[rel]').tooltip();
+    })
+  </script>
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-63083-7']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script');
+      ga.type = 'text/javascript';
+      ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</body>
+</html>

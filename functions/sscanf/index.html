@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <title> - php.js</title>
+  <meta name="author" content="Kevin van Zonneveld">
+
+
+  <meta name="description" content="php.js is a resource that offers community-built JavaScript alternatives to PHP functions.">
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <link rel="canonical" href="http://phpjs.org/about/">
+  <link href="/favicon.ico" rel="shortcut icon">
+  <link href="//kvz.github.io/on-the-githubs/css/on-the-githubs.min.css" rel="stylesheet" />
+  <link data-meta="css.app" href="/assets/build/app.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script data-meta="js.head" src="/assets/build/head.js"></script>
+  <link href="/atom.xml" rel="alternate" title="php.js" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+  <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+</head>
+
+<a target="_blank" href="https://github.com/kvz/phpjs">
+  <img id="fork-us" style="position: absolute; z-index: 99; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub">
+</a>
+
+<body>
+  <header role="banner">
+    <hgroup>
+      <div id="logo">
+        <h1><a href="/"><span>php</span><span>.js</span></a></h1>
+        <div class="clear"></div>
+      </div>
+
+      <h2>Learn how to do it in JavaScript. Explore boundaries porting languages. Enjoy functions that turn out to be useful.</h2>
+
+      <div class="clear"></div>
+    </hgroup>
+
+  </header>
+  <nav role="navigation">
+    <ul class="subscription" data-subscription="rss">
+      <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+
+    </ul>
+
+    <form action="http://google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:phpjs.org" />
+        <input class="search" type="text" name="q" results="0" placeholder="Search" />
+      </fieldset>
+    </form>
+
+    <ul class="main-navigation">
+      <li><a href="/about/">About</a></li>
+      <li><a href="/blog/archives/">Blog</a></li>
+      <li><a href="/functions/">Functions</a></li>
+      <li><a href="/authors/">Authors</a></li>
+      <li><a href="https://github.com/kvz/phpjs">GitHub</a></li>
+    </ul>
+
+  </nav>
+  <div id="main">
+    <div id="content">
+
+      <div>
+  <article role="article">
+    
+    <p>
+  Here’s what a JavaScript equivalent for
+  <a href="http://php.net/manual/en/function.sscanf.php">PHP’s sscanf</a>
+  looks like.
+</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">sscanf</span> <span class="p">(</span><span class="nx">str</span><span class="p">,</span> <span class="nx">format</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//  discuss at: http://phpjs.org/functions/sscanf/</span>
+  <span class="c1">// original by: Brett Zamir (http://brett-zamir.me)</span>
+  <span class="c1">//        note: Since JS does not support scalar reference variables, any additional arguments to the function will</span>
+  <span class="c1">//        note: only be allowable here as strings referring to a global variable (which will then be set to the value</span>
+  <span class="c1">//        note: found in 'str' corresponding to the appropriate conversion specification in 'format'</span>
+  <span class="c1">//        note: I am unclear on how WS is to be handled here because documentation seems to me to contradict PHP behavior</span>
+  <span class="c1">//   example 1: sscanf('SN/2350001', 'SN/%d');</span>
+  <span class="c1">//   returns 1: [2350001]</span>
+  <span class="c1">//   example 2: var myVar; // Will be set by function</span>
+  <span class="c1">//   example 2: sscanf('SN/2350001', 'SN/%d', 'myVar');</span>
+  <span class="c1">//   returns 2: 1</span>
+  <span class="c1">//   example 3: sscanf("10--20", "%2$d--%1$d"); // Must escape '$' in PHP, but not JS</span>
+  <span class="c1">//   returns 3: [20, 10]</span>
+
+  <span class="c1">// SETUP</span>
+  <span class="kd">var</span> <span class="nx">retArr</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nx">num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">_NWS</span> <span class="o">=</span> <span class="sr">/</span><span class="se">\S</span><span class="sr">/</span><span class="p">,</span>
+    <span class="nx">args</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">,</span>
+    <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span>
+    <span class="nx">digit</span>
+
+  <span class="kd">var</span> <span class="nx">_setExtraConversionSpecs</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">offset</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Since a mismatched character sets us off track from future legitimate finds, we just scan</span>
+    <span class="c1">// to the end for any other conversion specifications (besides a percent literal), setting them to null</span>
+    <span class="c1">// sscanf seems to disallow all conversion specification components (of sprintf) except for type specifiers</span>
+    <span class="c1">// Do not allow % in last char. class</span>
+    <span class="c1">// var matches = format.match(/%[+-]?([ 0]|'.)?-?\d*(\.\d+)?[bcdeufFosxX]/g);</span>
+    <span class="kd">var</span> <span class="nx">matches</span> <span class="o">=</span> <span class="nx">format</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">offset</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/%</span><span class="se">[</span><span class="sr">cdeEufgosxX</span><span class="se">]</span><span class="sr">/g</span><span class="p">)</span> <span class="c1">// Do not allow % in last char. class;</span>
+    <span class="c1">// b, F,G give errors in PHP, but 'g', though also disallowed, doesn't</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">matches</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">lgth</span> <span class="o">=</span> <span class="nx">matches</span><span class="p">.</span><span class="nx">length</span>
+      <span class="k">while</span> <span class="p">(</span><span class="nx">lgth</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">retArr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">_finish</span><span class="p">()</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">_finish</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">retArr</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">retArr</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">that</span><span class="p">.</span><span class="nb">window</span><span class="p">[</span><span class="nx">args</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">retArr</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">i</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">_addNext</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="nx">regex</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">assign</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">remaining</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">j</span><span class="p">)</span>
+      <span class="kd">var</span> <span class="nx">check</span> <span class="o">=</span> <span class="nx">width</span> <span class="p">?</span> <span class="nx">remaining</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">)</span> <span class="p">:</span> <span class="nx">remaining</span>
+      <span class="kd">var</span> <span class="nx">match</span> <span class="o">=</span> <span class="nx">regex</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">check</span><span class="p">)</span>
+      <span class="kd">var</span> <span class="nx">testNull</span> <span class="o">=</span> <span class="nx">retArr</span><span class="p">[</span><span class="nx">digit</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="p">?</span> <span class="nx">digit</span> <span class="p">:</span> <span class="nx">retArr</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="nx">match</span> <span class="p">?</span> <span class="p">(</span><span class="nx">cb</span> <span class="p">?</span> <span class="nx">cb</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">match</span><span class="p">)</span> <span class="p">:</span>
+        <span class="nx">match</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="kc">null</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">testNull</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="s1">'No match in string'</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">match</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">j</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="s1">'Not enough arguments passed to sscanf'</span>
+  <span class="p">}</span>
+
+  <span class="c1">// PROCESS</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">format</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="kd">var</span> <span class="nx">width</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nx">assign</span> <span class="o">=</span> <span class="kc">true</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">format</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">===</span> <span class="s1">'%'</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">format</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">===</span> <span class="s1">'%'</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">j</span><span class="p">)</span> <span class="o">===</span> <span class="s1">'%'</span><span class="p">)</span> <span class="p">{</span>
+          <span class="c1">// a matched percent literal</span>
+          <span class="c1">// skip beyond duplicated percent</span>
+          <span class="o">++</span><span class="nx">i</span><span class="p">,</span> <span class="o">++</span><span class="nx">j</span>
+          <span class="k">continue</span>
+        <span class="p">}</span>
+        <span class="c1">// Format indicated a percent literal, but not actually present</span>
+        <span class="k">return</span> <span class="nx">_setExtraConversionSpecs</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+      <span class="p">}</span>
+
+      <span class="c1">// CHARACTER FOLLOWING PERCENT IS NOT A PERCENT</span>
+
+      <span class="c1">// We need 'g' set to get lastIndex</span>
+      <span class="kd">var</span> <span class="nx">prePattern</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">'^(?:(\\d+)\\$)?(\\*)?(\\d*)([hlL]?)'</span><span class="p">,</span> <span class="s1">'g'</span><span class="p">)</span>
+
+      <span class="kd">var</span> <span class="nx">preConvs</span> <span class="o">=</span> <span class="nx">prePattern</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">format</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+      <span class="kd">var</span> <span class="nx">tmpDigit</span> <span class="o">=</span> <span class="nx">digit</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">tmpDigit</span> <span class="o">&amp;&amp;</span> <span class="nx">preConvs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="s1">'All groups in sscanf() must be expressed as numeric if any have already been used'</span>
+      <span class="p">}</span>
+      <span class="nx">digit</span> <span class="o">=</span> <span class="nx">preConvs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">?</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">preConvs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:</span> <span class="kc">undefined</span>
+
+      <span class="nx">assign</span> <span class="o">=</span> <span class="o">!</span><span class="nx">preConvs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+      <span class="nx">width</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">preConvs</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
+      <span class="kd">var</span> <span class="nx">sizeCode</span> <span class="o">=</span> <span class="nx">preConvs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+      <span class="nx">i</span> <span class="o">+=</span> <span class="nx">prePattern</span><span class="p">.</span><span class="nx">lastIndex</span>
+
+      <span class="c1">// Fix: Does PHP do anything with these? Seems not to matter</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">sizeCode</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// This would need to be processed later</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="nx">sizeCode</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">case</span> <span class="s1">'h'</span><span class="err">:</span>
+          <span class="c1">// Treats subsequent as short int (for d,i,n) or unsigned short int (for o,u,x)</span>
+          <span class="k">case</span> <span class="s1">'l'</span><span class="err">:</span>
+          <span class="c1">// Treats subsequent as long int (for d,i,n), or unsigned long int (for o,u,x);</span>
+          <span class="c1">//    or as double (for e,f,g) instead of float or wchar_t instead of char</span>
+          <span class="k">case</span> <span class="s1">'L'</span><span class="err">:</span>
+          <span class="c1">// Treats subsequent as long double (for e,f,g)</span>
+            <span class="k">break</span>
+          <span class="k">default</span><span class="err">:</span>
+            <span class="k">throw</span> <span class="s1">'Unexpected size specifier in sscanf()!'</span>
+            <span class="k">break</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="c1">// PROCESS CHARACTER</span>
+      <span class="k">try</span> <span class="p">{</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="nx">format</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="p">{</span>
+          <span class="c1">// For detailed explanations, see http://web.archive.org/web/20031128125047/http://www.uwm.edu/cgi-bin/IMT/wwwman?topic=scanf%283%29&amp;msection=</span>
+          <span class="c1">// Also http://www.mathworks.com/access/helpdesk/help/techdoc/ref/sscanf.html</span>
+          <span class="c1">// p, S, C arguments in C function not available</span>
+          <span class="c1">// DOCUMENTED UNDER SSCANF</span>
+          <span class="k">case</span> <span class="s1">'F'</span><span class="p">:</span>
+          <span class="c1">// Not supported in PHP sscanf; the argument is treated as a float, and</span>
+          <span class="c1">//  presented as a floating-point number (non-locale aware)</span>
+          <span class="c1">// sscanf doesn't support locales, so no need for two (see %f)</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'g'</span><span class="p">:</span>
+          <span class="c1">// Not supported in PHP sscanf; shorter of %e and %f</span>
+          <span class="c1">// Irrelevant to input conversion</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'G'</span><span class="p">:</span>
+          <span class="c1">// Not supported in PHP sscanf; shorter of %E and %f</span>
+          <span class="c1">// Irrelevant to input conversion</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'b'</span><span class="p">:</span>
+          <span class="c1">// Not supported in PHP sscanf; the argument is treated as an integer, and presented as a binary number</span>
+          <span class="c1">// Not supported - couldn't distinguish from other integers</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'i'</span><span class="p">:</span>
+          <span class="c1">// Integer with base detection (Equivalent of 'd', but base 0 instead of 10)</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/</span><span class="se">([</span><span class="sr">+-</span><span class="se">])?(?:(?:</span><span class="sr">0x</span><span class="se">([\d</span><span class="sr">a-fA-F</span><span class="se">]</span><span class="sr">+</span><span class="se">))</span><span class="sr">|</span><span class="se">(?:</span><span class="sr">0</span><span class="se">([</span><span class="sr">0-7</span><span class="se">]</span><span class="sr">+</span><span class="se">))</span><span class="sr">|</span><span class="se">(\d</span><span class="sr">+</span><span class="se">))</span><span class="sr">/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="nx">sign</span><span class="p">,</span> <span class="nx">hex</span><span class="p">,</span>
+            <span class="nx">oct</span><span class="p">,</span> <span class="nx">dec</span><span class="p">)</span> <span class="p">{</span>
+              <span class="k">return</span> <span class="nx">hex</span> <span class="p">?</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span> <span class="p">:</span> <span class="nx">oct</span> <span class="p">?</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="p">:</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'n'</span><span class="err">:</span>
+          <span class="c1">// Number of characters processed so far</span>
+            <span class="nx">retArr</span><span class="p">[</span><span class="nx">digit</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="p">?</span> <span class="nx">digit</span> <span class="p">:</span> <span class="nx">retArr</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">j</span>
+            <span class="k">break</span>
+          <span class="c1">// DOCUMENTED UNDER SPRINTF</span>
+          <span class="k">case</span> <span class="s1">'c'</span><span class="err">:</span>
+          <span class="c1">// Get character; suppresses skipping over whitespace! (but shouldn't be whitespace in format anyways, so no difference here)</span>
+          <span class="c1">// Non-greedy match</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">'.{1,'</span> <span class="o">+</span> <span class="p">(</span><span class="nx">width</span> <span class="o">||</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'}'</span><span class="p">))</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'D'</span><span class="err">:</span>
+          <span class="c1">// sscanf documented decimal number; equivalent of 'd';</span>
+          <span class="k">case</span> <span class="s1">'d'</span><span class="err">:</span>
+          <span class="c1">// Optionally signed decimal integer</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/</span><span class="se">([</span><span class="sr">+-</span><span class="se">])?(?:</span><span class="sr">0*</span><span class="se">)(\d</span><span class="sr">+</span><span class="se">)</span><span class="sr">/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="nx">sign</span><span class="p">,</span> <span class="nx">dec</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// Ignores initial zeroes, unlike %i and parseInt()</span>
+              <span class="kd">var</span> <span class="nx">decInt</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">((</span><span class="nx">sign</span> <span class="o">||</span> <span class="s1">''</span><span class="p">)</span> <span class="o">+</span> <span class="nx">dec</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+              <span class="k">if</span> <span class="p">(</span><span class="nx">decInt</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+              <span class="c1">// PHP also won't allow less than -2147483648</span>
+              <span class="c1">// integer overflow with negative</span>
+                <span class="k">return</span> <span class="nx">decInt</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">2147483648</span> <span class="p">?</span> <span class="o">-</span><span class="mi">2147483648</span> <span class="p">:</span> <span class="nx">decInt</span>
+              <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+              <span class="c1">// PHP also won't allow greater than -2147483647</span>
+                <span class="k">return</span> <span class="nx">decInt</span> <span class="o">&lt;</span> <span class="mi">2147483647</span> <span class="p">?</span> <span class="nx">decInt</span> <span class="p">:</span> <span class="mi">2147483647</span>
+              <span class="p">}</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'f'</span><span class="err">:</span>
+          <span class="c1">// Although sscanf doesn't support locales, this is used instead of '%F'; seems to be same as %e</span>
+          <span class="k">case</span> <span class="s1">'E'</span><span class="err">:</span>
+          <span class="c1">// These don't discriminate here as both allow exponential float of either case</span>
+          <span class="k">case</span> <span class="s1">'e'</span><span class="err">:</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/</span><span class="se">([</span><span class="sr">+-</span><span class="se">])?(?:</span><span class="sr">0*</span><span class="se">)(\d</span><span class="sr">*</span><span class="se">\.?\d</span><span class="sr">*</span><span class="se">(?:[</span><span class="sr">eE</span><span class="se">]?\d</span><span class="sr">+</span><span class="se">)?)</span><span class="sr">/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="nx">sign</span><span class="p">,</span> <span class="nx">dec</span><span class="p">)</span> <span class="p">{</span>
+              <span class="k">if</span> <span class="p">(</span><span class="nx">dec</span> <span class="o">===</span> <span class="s1">'.'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="kc">null</span>
+              <span class="p">}</span>
+            <span class="c1">// Ignores initial zeroes, unlike %i and parseFloat()</span>
+              <span class="k">return</span> <span class="nb">parseFloat</span><span class="p">((</span><span class="nx">sign</span> <span class="o">||</span> <span class="s1">''</span><span class="p">)</span> <span class="o">+</span> <span class="nx">dec</span><span class="p">)</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'u'</span><span class="err">:</span>
+          <span class="c1">// unsigned decimal integer</span>
+          <span class="c1">// We won't deal with integer overflows due to signs</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/</span><span class="se">([</span><span class="sr">+-</span><span class="se">])?(?:</span><span class="sr">0*</span><span class="se">)(\d</span><span class="sr">+</span><span class="se">)</span><span class="sr">/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="nx">sign</span><span class="p">,</span> <span class="nx">dec</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// Ignores initial zeroes, unlike %i and parseInt()</span>
+              <span class="kd">var</span> <span class="nx">decInt</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">dec</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+              <span class="k">if</span> <span class="p">(</span><span class="nx">sign</span> <span class="o">===</span> <span class="s1">'-'</span><span class="p">)</span> <span class="p">{</span>
+              <span class="c1">// PHP also won't allow greater than 4294967295</span>
+              <span class="c1">// integer overflow with negative</span>
+                <span class="k">return</span> <span class="mi">4294967296</span> <span class="o">-</span> <span class="nx">decInt</span>
+              <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">decInt</span> <span class="o">&lt;</span> <span class="mi">4294967295</span> <span class="p">?</span> <span class="nx">decInt</span> <span class="p">:</span> <span class="mi">4294967295</span>
+              <span class="p">}</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'o'</span><span class="err">:</span>
+          <span class="c1">// Octal integer // Fix: add overflows as above?</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/</span><span class="se">([</span><span class="sr">+-</span><span class="se">])?(?:</span><span class="sr">0</span><span class="se">([</span><span class="sr">0-7</span><span class="se">]</span><span class="sr">+</span><span class="se">))</span><span class="sr">/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="nx">sign</span><span class="p">,</span> <span class="nx">oct</span><span class="p">)</span> <span class="p">{</span>
+              <span class="k">return</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'s'</span><span class="err">:</span>
+          <span class="c1">// Greedy match</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/</span><span class="se">\S</span><span class="sr">+/</span><span class="p">)</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">'X'</span><span class="err">:</span>
+          <span class="c1">// Same as 'x'?</span>
+          <span class="k">case</span> <span class="s1">'x'</span><span class="err">:</span>
+          <span class="c1">// Fix: add overflows as above?</span>
+          <span class="c1">// Initial 0x not necessary here</span>
+            <span class="nx">j</span> <span class="o">=</span> <span class="nx">_addNext</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span> <span class="sr">/</span><span class="se">([</span><span class="sr">+-</span><span class="se">])?(?:(?:</span><span class="sr">0x</span><span class="se">)?([\d</span><span class="sr">a-fA-F</span><span class="se">]</span><span class="sr">+</span><span class="se">))</span><span class="sr">/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="nx">sign</span><span class="p">,</span> <span class="nx">hex</span><span class="p">)</span> <span class="p">{</span>
+              <span class="k">return</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">num</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+            <span class="p">})</span>
+            <span class="k">break</span>
+          <span class="k">case</span> <span class="s1">''</span><span class="err">:</span>
+          <span class="c1">// If no character left in expression</span>
+            <span class="k">throw</span> <span class="s1">'Missing character after percent mark in sscanf() format argument'</span>
+          <span class="nl">default</span><span class="p">:</span>
+            <span class="k">throw</span> <span class="s1">'Unrecognized character after percent mark in sscanf() format argument'</span>
+        <span class="p">}</span>
+      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">e</span> <span class="o">===</span> <span class="s1">'No match in string'</span><span class="p">)</span> <span class="p">{</span>
+          <span class="c1">// Allow us to exit</span>
+          <span class="k">return</span> <span class="nx">_setExtraConversionSpecs</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="c1">// Calculate skipping beyond initial percent too</span>
+      <span class="p">}</span><span class="o">++</span><span class="nx">i</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">format</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">!==</span> <span class="nx">str</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">j</span><span class="p">))</span> <span class="p">{</span>
+      <span class="c1">// Fix: Double-check i whitespace ignored in string and/or formats</span>
+      <span class="nx">_NWS</span><span class="p">.</span><span class="nx">lastIndex</span> <span class="o">=</span> <span class="mi">0</span>
+      <span class="k">if</span> <span class="p">((</span><span class="nx">_NWS</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">j</span><span class="p">))</span> <span class="o">||</span> <span class="nx">str</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">j</span><span class="p">)</span> <span class="o">===</span> <span class="s1">''</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Whitespace doesn't need to be an exact match)</span>
+        <span class="k">return</span> <span class="nx">_setExtraConversionSpecs</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// Adjust strings when encounter non-matching whitespace, so they align in future checks above</span>
+        <span class="c1">// Ok to replace with j++;?</span>
+        <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">j</span><span class="p">)</span> <span class="o">+</span> <span class="nx">str</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="nx">i</span><span class="o">--</span>
+      <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">j</span><span class="o">++</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="c1">// POST-PROCESSING</span>
+  <span class="k">return</span> <span class="nx">_finish</span><span class="p">()</span>
+<span class="p">}</span></code></pre></figure>
+
+<a class="basic-alignment left themebutton" href="https://github.com/kvz/phpjs/blob/master/functions/strings/sscanf.js">View on GitHub</a>
+<a class="basic-alignment left themebutton" href="https://github.com/kvz/phpjs/edit/master/functions/strings/sscanf.js">Edit on GitHub</a>
+<a class="basic-alignment left themebutton" href="https://raw.githubusercontent.com/kvz/phpjs/master/functions/strings/sscanf.js">Source on GitHub</a>
+
+<div class="clearfix"></div>
+
+
+
+
+<h2>A community initiative</h2>
+<p>
+  php.js offers community built functions and goes by the
+  <a href="https://medium.com/what-i-learned-building/9216e1c9da7d">McDonald’s Theory</a>.
+  We’ll put online functions that aren't perfect, in the hopes to spark better contributions.
+  Do you have one? You can directly edit this file on GitHub, this will create a Pull Request that
+  the core team can review, and merge into our codebase.
+</p>
+<p>
+  This way of working also means that we don't offer any
+  production guarantees, and recommend to use php.js inspiration
+  and learning purposes only.
+</p>
+
+
+  <h2>Notes</h2>
+  
+    <p>Since JS does not support scalar reference variables, any additional arguments to the function will
+only be allowable here as strings referring to a global variable (which will then be set to the value
+found in 'str' corresponding to the appropriate conversion specification in 'format'
+I am unclear on how WS is to be handled here because documentation seems to me to contradict PHP behavior</p>
+
+  
+
+
+
+
+
+  
+    <h2>Example 1</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">sscanf</span><span class="p">(</span><span class="s1">'SN/2350001'</span><span class="p">,</span> <span class="s1">'SN/%d'</span><span class="p">);</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">[</span><span class="mi">2350001</span><span class="p">]</span></code></pre></figure>
+  
+    <h2>Example 2</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">myVar</span><span class="p">;</span> <span class="c1">// Will be set by function</span>
+<span class="nx">sscanf</span><span class="p">(</span><span class="s1">'SN/2350001'</span><span class="p">,</span> <span class="s1">'SN/%d'</span><span class="p">,</span> <span class="s1">'myVar'</span><span class="p">);</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="mi">1</span></code></pre></figure>
+  
+    <h2>Example 3</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">sscanf</span><span class="p">(</span><span class="s2">"10--20"</span><span class="p">,</span> <span class="s2">"%2$d--%1$d"</span><span class="p">);</span> <span class="c1">// Must escape '$' in PHP, but not JS</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span></code></pre></figure>
+  
+
+
+<p>
+  <a class="basic-alignment left themebutton" href="/functions/#strings">&laquo; More strings functions</a>
+</p>
+
+  </article>
+</div>
+
+
+
+      <aside class="sidebar">
+        <section>
+  <h1>Advertisement</h1>
+  <div id="carbonads-container" style="padding-top: 20px !important; padding-left: 40px !important; ">
+    <div class="carbonad">
+      <div id="azcarbon"></div>
+      <script type="text/javascript">
+        var z = document.createElement("script");
+        z.type = "text/javascript";
+        z.async = true;
+        z.src = "http://engine.carbonads.com/z/55999/azcarbon_2_1_0_VERT";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(z, s);
+      </script>
+    </div>
+  </div>
+
+  <h1>Uploading &amp; Encoding</h1>
+  <p>
+    Struggling with file uploads?
+    <a title="File uploading &amp; encoding service" style="color: #3464a4;" href="https://transloadit.com">Transloadit</a>
+    deals with progress bars, encoding, resizing, and storing, so you can focus on your web/app. It's pretty sweet.
+  </p>
+</section>
+
+<!-- Generated by Rakefile:build -->
+<section>
+  <h1>Categories</h1>
+  <ul id='category-list'>
+    
+    
+    <li><a href="/functions/#array">array</a> (75)</li>
+    
+    <li><a href="/functions/#bc">bc</a> (7)</li>
+    
+    <li><a href="/functions/#ctype">ctype</a> (11)</li>
+    
+    <li><a href="/functions/#datetime">datetime</a> (15)</li>
+    
+    <li><a href="/functions/#exec">exec</a> (1)</li>
+    
+    <li><a href="/functions/#filesystem">filesystem</a> (5)</li>
+    
+    <li><a href="/functions/#funchand">funchand</a> (5)</li>
+    
+    <li><a href="/functions/#i18n">i18n</a> (2)</li>
+    
+    <li><a href="/functions/#info">info</a> (7)</li>
+    
+    <li><a href="/functions/#json">json</a> (3)</li>
+    
+    <li><a href="/functions/#math">math</a> (46)</li>
+    
+    <li><a href="/functions/#misc">misc</a> (3)</li>
+    
+    <li><a href="/functions/#net-gopher">net-gopher</a> (1)</li>
+    
+    <li><a href="/functions/#network">network</a> (6)</li>
+    
+    <li><a href="/functions/#pcre">pcre</a> (3)</li>
+    
+    <li><a href="/functions/#strings">strings</a> (91)</li>
+    
+    <li><a href="/functions/#url">url</a> (10)</li>
+    
+    <li><a href="/functions/#var">var</a> (31)</li>
+    
+    <li><a href="/functions/#xdiff">xdiff</a> (2)</li>
+    
+    <li><a href="/functions/#xml">xml</a> (2)</li>
+    
+  </ul>
+</section>
+<section>
+  <h1>On the githubs</h1>
+  <ul class="on-the-githubs" data-event-source="repos/kvz/phpjs">Loading...</ul>
+  <br />
+  <br />
+</section>
+
+
+<section>
+  <h1>Badges</h1>
+
+  <p>
+    <a href="http://travis-ci.org/kvz/phpjs"><img src="https://secure.travis-ci.org/kvz/phpjs.png?branch=master" /></a>
+    <br />
+    <a href="https://npmjs.org/package/phpjs"><img src="http://badge.fury.io/js/phpjs.png" /></a>
+    <br />
+    <a href="https://david-dm.org/kvz/phpjs"><img src="https://david-dm.org/kvz/phpjs.png?theme=shields.io" /></a>
+    <br />
+    <a href="https://david-dm.org/kvz/phpjs#info=devDependencies"><img src="https://david-dm.org/kvz/phpjs/dev-status.png?theme=shields.io" /></a>
+    <br />
+  </p>
+
+  <h1>Sponsor development</h1>
+
+  <p>
+    <a href="https://www.gittip.com/kvz/"><img src="http://img.shields.io/gittip/kvz.png?color=green" /></a>
+    <br />
+    <a href="https://flattr.com/submit/auto?user_id=kvz&url=https://github.com/kvz/phpjs&title=phpjs&language=&tags=github&category=software"><img src="http://img.shields.io/flattr/donate.png?color=green" /></a>
+    <br />
+    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=kevin%40vanzonneveld%2enet&lc=NL&item_name=Open%20source%20donation%20to%20Kevin%20van%20Zonneveld&currency_code=USD&bn=PP-DonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><img src="http://img.shields.io/paypal/donate.png?color=green" /></a>
+    <br />
+    <a href="https://coinbase.com/checkouts/19BtCjLCboRgTAXiaEvnvkdoRyjd843Dg2"><img src="http://img.shields.io/bitcoin/donate.png?color=green" /></a>
+    <br />
+  </p>
+</section>
+
+      </aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo">
+    <p>
+      Copyright &copy; 2007-2016 - <a href="http://twitter.com/kvz">Kevin van Zonneveld</a> and <a href="/authors/">contributors</a> -
+      <span class="credit">Powered by <a href="http://jekyllrb.com">Jekyll</a></span> -
+      <span class="credit">Theme by <a href="http://melandri.net/2012/07/23/darkstripes-octopress-theme-released/">alessandro melandri</a></span>
+    </p>
+
+  </footer>
+
+  <script data-meta="js.app" src="/assets/build/app.js"></script>
+
+  <script src="//kvz.github.io/on-the-githubs/js/jquery.on-the-githubs.min.js"></script>
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.on-the-githubs').onthegithubs();
+      // If you use bootstrap and want to enable tooltips
+      // $('a[rel]').tooltip();
+    })
+  </script>
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-63083-7']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script');
+      ga.type = 'text/javascript';
+      ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</body>
+</html>

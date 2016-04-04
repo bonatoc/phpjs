@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <title> - php.js</title>
+  <meta name="author" content="Kevin van Zonneveld">
+
+
+  <meta name="description" content="php.js is a resource that offers community-built JavaScript alternatives to PHP functions.">
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <link rel="canonical" href="http://phpjs.org/about/">
+  <link href="/favicon.ico" rel="shortcut icon">
+  <link href="//kvz.github.io/on-the-githubs/css/on-the-githubs.min.css" rel="stylesheet" />
+  <link data-meta="css.app" href="/assets/build/app.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script data-meta="js.head" src="/assets/build/head.js"></script>
+  <link href="/atom.xml" rel="alternate" title="php.js" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+  <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+</head>
+
+<a target="_blank" href="https://github.com/kvz/phpjs">
+  <img id="fork-us" style="position: absolute; z-index: 99; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub">
+</a>
+
+<body>
+  <header role="banner">
+    <hgroup>
+      <div id="logo">
+        <h1><a href="/"><span>php</span><span>.js</span></a></h1>
+        <div class="clear"></div>
+      </div>
+
+      <h2>Learn how to do it in JavaScript. Explore boundaries porting languages. Enjoy functions that turn out to be useful.</h2>
+
+      <div class="clear"></div>
+    </hgroup>
+
+  </header>
+  <nav role="navigation">
+    <ul class="subscription" data-subscription="rss">
+      <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+
+    </ul>
+
+    <form action="http://google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:phpjs.org" />
+        <input class="search" type="text" name="q" results="0" placeholder="Search" />
+      </fieldset>
+    </form>
+
+    <ul class="main-navigation">
+      <li><a href="/about/">About</a></li>
+      <li><a href="/blog/archives/">Blog</a></li>
+      <li><a href="/functions/">Functions</a></li>
+      <li><a href="/authors/">Authors</a></li>
+      <li><a href="https://github.com/kvz/phpjs">GitHub</a></li>
+    </ul>
+
+  </nav>
+  <div id="main">
+    <div id="content">
+
+      <div>
+  <article role="article">
+    
+    <p>
+  Here’s what a JavaScript equivalent for
+  <a href="http://php.net/manual/en/function.md5.php">PHP’s md5</a>
+  looks like.
+</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">md5</span> <span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//  discuss at: http://phpjs.org/functions/md5/</span>
+  <span class="c1">// original by: Webtoolkit.info (http://www.webtoolkit.info/)</span>
+  <span class="c1">// improved by: Michael White (http://getsprink.com)</span>
+  <span class="c1">// improved by: Jack</span>
+  <span class="c1">// improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)</span>
+  <span class="c1">//    input by: Brett Zamir (http://brett-zamir.me)</span>
+  <span class="c1">// bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)</span>
+  <span class="c1">//  depends on: utf8_encode</span>
+  <span class="c1">//   example 1: md5('Kevin van Zonneveld');</span>
+  <span class="c1">//   returns 1: '6e658d4bfcb59cc13f96c14450ac40b9'</span>
+
+  <span class="kd">var</span> <span class="nx">xl</span>
+
+  <span class="kd">var</span> <span class="nx">rotateLeft</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">lValue</span><span class="p">,</span> <span class="nx">iShiftBits</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">lValue</span> <span class="o">&lt;&lt;</span> <span class="nx">iShiftBits</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="nx">lValue</span> <span class="o">&gt;&gt;&gt;</span> <span class="p">(</span><span class="mi">32</span> <span class="o">-</span> <span class="nx">iShiftBits</span><span class="p">))</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">addUnsigned</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">lX</span><span class="p">,</span> <span class="nx">lY</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">lX4</span><span class="p">,</span> <span class="nx">lY4</span><span class="p">,</span> <span class="nx">lX8</span><span class="p">,</span> <span class="nx">lY8</span><span class="p">,</span> <span class="nx">lResult</span>
+    <span class="nx">lX8</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lX</span> <span class="o">&amp;</span> <span class="mh">0x80000000</span><span class="p">)</span>
+    <span class="nx">lY8</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lY</span> <span class="o">&amp;</span> <span class="mh">0x80000000</span><span class="p">)</span>
+    <span class="nx">lX4</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lX</span> <span class="o">&amp;</span> <span class="mh">0x40000000</span><span class="p">)</span>
+    <span class="nx">lY4</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lY</span> <span class="o">&amp;</span> <span class="mh">0x40000000</span><span class="p">)</span>
+    <span class="nx">lResult</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lX</span> <span class="o">&amp;</span> <span class="mh">0x3FFFFFFF</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="nx">lY</span> <span class="o">&amp;</span> <span class="mh">0x3FFFFFFF</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">lX4</span> <span class="o">&amp;</span> <span class="nx">lY4</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">(</span><span class="nx">lResult</span> <span class="o">^</span> <span class="mh">0x80000000</span> <span class="o">^</span> <span class="nx">lX8</span> <span class="o">^</span> <span class="nx">lY8</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">lX4</span> <span class="o">|</span> <span class="nx">lY4</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">lResult</span> <span class="o">&amp;</span> <span class="mh">0x40000000</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nx">lResult</span> <span class="o">^</span> <span class="mh">0xC0000000</span> <span class="o">^</span> <span class="nx">lX8</span> <span class="o">^</span> <span class="nx">lY8</span><span class="p">)</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nx">lResult</span> <span class="o">^</span> <span class="mh">0x40000000</span> <span class="o">^</span> <span class="nx">lX8</span> <span class="o">^</span> <span class="nx">lY8</span><span class="p">)</span>
+      <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">(</span><span class="nx">lResult</span> <span class="o">^</span> <span class="nx">lX8</span> <span class="o">^</span> <span class="nx">lY8</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">_F</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">z</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&amp;</span> <span class="nx">y</span><span class="p">)</span> <span class="o">|</span> <span class="p">((</span><span class="o">~</span><span class="nx">x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nx">z</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_G</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">z</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&amp;</span> <span class="nx">z</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="nx">y</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="nx">z</span><span class="p">))</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_H</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">z</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">x</span> <span class="o">^</span> <span class="nx">y</span> <span class="o">^</span> <span class="nx">z</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">_I</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">z</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">y</span> <span class="o">^</span> <span class="p">(</span><span class="nx">x</span> <span class="o">|</span> <span class="p">(</span><span class="o">~</span><span class="nx">z</span><span class="p">)))</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">_FF</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">ac</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">_F</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">),</span> <span class="nx">x</span><span class="p">),</span> <span class="nx">ac</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">rotateLeft</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">s</span><span class="p">),</span> <span class="nx">b</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">_GG</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">ac</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">_G</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">),</span> <span class="nx">x</span><span class="p">),</span> <span class="nx">ac</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">rotateLeft</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">s</span><span class="p">),</span> <span class="nx">b</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">_HH</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">ac</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">_H</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">),</span> <span class="nx">x</span><span class="p">),</span> <span class="nx">ac</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">rotateLeft</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">s</span><span class="p">),</span> <span class="nx">b</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">_II</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">ac</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">_I</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">),</span> <span class="nx">x</span><span class="p">),</span> <span class="nx">ac</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">rotateLeft</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">s</span><span class="p">),</span> <span class="nx">b</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">convertToWordArray</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">lWordCount</span>
+    <span class="kd">var</span> <span class="nx">lMessageLength</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">length</span>
+    <span class="kd">var</span> <span class="nx">lNumberOfWords_temp1</span> <span class="o">=</span> <span class="nx">lMessageLength</span> <span class="o">+</span> <span class="mi">8</span>
+    <span class="kd">var</span> <span class="nx">lNumberOfWords_temp2</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lNumberOfWords_temp1</span> <span class="o">-</span> <span class="p">(</span><span class="nx">lNumberOfWords_temp1</span> <span class="o">%</span> <span class="mi">64</span><span class="p">))</span> <span class="o">/</span> <span class="mi">64</span>
+    <span class="kd">var</span> <span class="nx">lNumberOfWords</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lNumberOfWords_temp2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">16</span>
+    <span class="kd">var</span> <span class="nx">lWordArray</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">lNumberOfWords</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="kd">var</span> <span class="nx">lBytePosition</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="kd">var</span> <span class="nx">lByteCount</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nx">lByteCount</span> <span class="o">&lt;</span> <span class="nx">lMessageLength</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">lWordCount</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lByteCount</span> <span class="o">-</span> <span class="p">(</span><span class="nx">lByteCount</span> <span class="o">%</span> <span class="mi">4</span><span class="p">))</span> <span class="o">/</span> <span class="mi">4</span>
+      <span class="nx">lBytePosition</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lByteCount</span> <span class="o">%</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span>
+      <span class="nx">lWordArray</span><span class="p">[</span><span class="nx">lWordCount</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lWordArray</span><span class="p">[</span><span class="nx">lWordCount</span><span class="p">]</span> <span class="o">|</span> <span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">lByteCount</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="nx">lBytePosition</span><span class="p">))</span>
+      <span class="nx">lByteCount</span><span class="o">++</span>
+    <span class="p">}</span>
+    <span class="nx">lWordCount</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lByteCount</span> <span class="o">-</span> <span class="p">(</span><span class="nx">lByteCount</span> <span class="o">%</span> <span class="mi">4</span><span class="p">))</span> <span class="o">/</span> <span class="mi">4</span>
+    <span class="nx">lBytePosition</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lByteCount</span> <span class="o">%</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span>
+    <span class="nx">lWordArray</span><span class="p">[</span><span class="nx">lWordCount</span><span class="p">]</span> <span class="o">=</span> <span class="nx">lWordArray</span><span class="p">[</span><span class="nx">lWordCount</span><span class="p">]</span> <span class="o">|</span> <span class="p">(</span><span class="mh">0x80</span> <span class="o">&lt;&lt;</span> <span class="nx">lBytePosition</span><span class="p">)</span>
+    <span class="nx">lWordArray</span><span class="p">[</span><span class="nx">lNumberOfWords</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nx">lMessageLength</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span>
+    <span class="nx">lWordArray</span><span class="p">[</span><span class="nx">lNumberOfWords</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">lMessageLength</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">29</span>
+    <span class="k">return</span> <span class="nx">lWordArray</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">wordToHex</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">lValue</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">wordToHexValue</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span>
+      <span class="nx">wordToHexValue_temp</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span>
+      <span class="nx">lByte</span><span class="p">,</span> <span class="nx">lCount</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nx">lCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">lCount</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">;</span> <span class="nx">lCount</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">lByte</span> <span class="o">=</span> <span class="p">(</span><span class="nx">lValue</span> <span class="o">&gt;&gt;&gt;</span> <span class="p">(</span><span class="nx">lCount</span> <span class="o">*</span> <span class="mi">8</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mi">255</span>
+      <span class="nx">wordToHexValue_temp</span> <span class="o">=</span> <span class="s1">'0'</span> <span class="o">+</span> <span class="nx">lByte</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+      <span class="nx">wordToHexValue</span> <span class="o">=</span> <span class="nx">wordToHexValue</span> <span class="o">+</span> <span class="nx">wordToHexValue_temp</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">wordToHexValue_temp</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">wordToHexValue</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nx">k</span><span class="p">,</span> <span class="nx">AA</span><span class="p">,</span> <span class="nx">BB</span><span class="p">,</span> <span class="nx">CC</span><span class="p">,</span> <span class="nx">DD</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">S11</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span>
+    <span class="nx">S12</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="nx">S13</span> <span class="o">=</span> <span class="mi">17</span><span class="p">,</span>
+    <span class="nx">S14</span> <span class="o">=</span> <span class="mi">22</span><span class="p">,</span>
+    <span class="nx">S21</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="nx">S22</span> <span class="o">=</span> <span class="mi">9</span><span class="p">,</span>
+    <span class="nx">S23</span> <span class="o">=</span> <span class="mi">14</span><span class="p">,</span>
+    <span class="nx">S24</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="nx">S31</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="nx">S32</span> <span class="o">=</span> <span class="mi">11</span><span class="p">,</span>
+    <span class="nx">S33</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
+    <span class="nx">S34</span> <span class="o">=</span> <span class="mi">23</span><span class="p">,</span>
+    <span class="nx">S41</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="nx">S42</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="nx">S43</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
+    <span class="nx">S44</span> <span class="o">=</span> <span class="mi">21</span>
+
+  <span class="nx">str</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">utf8_encode</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span>
+  <span class="nx">x</span> <span class="o">=</span> <span class="nx">convertToWordArray</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span>
+  <span class="nx">a</span> <span class="o">=</span> <span class="mh">0x67452301</span>
+  <span class="nx">b</span> <span class="o">=</span> <span class="mh">0xEFCDAB89</span>
+  <span class="nx">c</span> <span class="o">=</span> <span class="mh">0x98BADCFE</span>
+  <span class="nx">d</span> <span class="o">=</span> <span class="mh">0x10325476</span>
+
+  <span class="nx">xl</span> <span class="o">=</span> <span class="nx">x</span><span class="p">.</span><span class="nx">length</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">xl</span><span class="p">;</span> <span class="nx">k</span> <span class="o">+=</span> <span class="mi">16</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">AA</span> <span class="o">=</span> <span class="nx">a</span>
+    <span class="nx">BB</span> <span class="o">=</span> <span class="nx">b</span>
+    <span class="nx">CC</span> <span class="o">=</span> <span class="nx">c</span>
+    <span class="nx">DD</span> <span class="o">=</span> <span class="nx">d</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">0</span><span class="p">],</span> <span class="nx">S11</span><span class="p">,</span> <span class="mh">0xD76AA478</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="nx">S12</span><span class="p">,</span> <span class="mh">0xE8C7B756</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">],</span> <span class="nx">S13</span><span class="p">,</span> <span class="mh">0x242070DB</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">3</span><span class="p">],</span> <span class="nx">S14</span><span class="p">,</span> <span class="mh">0xC1BDCEEE</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">4</span><span class="p">],</span> <span class="nx">S11</span><span class="p">,</span> <span class="mh">0xF57C0FAF</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">5</span><span class="p">],</span> <span class="nx">S12</span><span class="p">,</span> <span class="mh">0x4787C62A</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">6</span><span class="p">],</span> <span class="nx">S13</span><span class="p">,</span> <span class="mh">0xA8304613</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">7</span><span class="p">],</span> <span class="nx">S14</span><span class="p">,</span> <span class="mh">0xFD469501</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">8</span><span class="p">],</span> <span class="nx">S11</span><span class="p">,</span> <span class="mh">0x698098D8</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">9</span><span class="p">],</span> <span class="nx">S12</span><span class="p">,</span> <span class="mh">0x8B44F7AF</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">10</span><span class="p">],</span> <span class="nx">S13</span><span class="p">,</span> <span class="mh">0xFFFF5BB1</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">11</span><span class="p">],</span> <span class="nx">S14</span><span class="p">,</span> <span class="mh">0x895CD7BE</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">12</span><span class="p">],</span> <span class="nx">S11</span><span class="p">,</span> <span class="mh">0x6B901122</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">13</span><span class="p">],</span> <span class="nx">S12</span><span class="p">,</span> <span class="mh">0xFD987193</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">14</span><span class="p">],</span> <span class="nx">S13</span><span class="p">,</span> <span class="mh">0xA679438E</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_FF</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">15</span><span class="p">],</span> <span class="nx">S14</span><span class="p">,</span> <span class="mh">0x49B40821</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="nx">S21</span><span class="p">,</span> <span class="mh">0xF61E2562</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">6</span><span class="p">],</span> <span class="nx">S22</span><span class="p">,</span> <span class="mh">0xC040B340</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">11</span><span class="p">],</span> <span class="nx">S23</span><span class="p">,</span> <span class="mh">0x265E5A51</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">0</span><span class="p">],</span> <span class="nx">S24</span><span class="p">,</span> <span class="mh">0xE9B6C7AA</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">5</span><span class="p">],</span> <span class="nx">S21</span><span class="p">,</span> <span class="mh">0xD62F105D</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">10</span><span class="p">],</span> <span class="nx">S22</span><span class="p">,</span> <span class="mh">0x2441453</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">15</span><span class="p">],</span> <span class="nx">S23</span><span class="p">,</span> <span class="mh">0xD8A1E681</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">4</span><span class="p">],</span> <span class="nx">S24</span><span class="p">,</span> <span class="mh">0xE7D3FBC8</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">9</span><span class="p">],</span> <span class="nx">S21</span><span class="p">,</span> <span class="mh">0x21E1CDE6</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">14</span><span class="p">],</span> <span class="nx">S22</span><span class="p">,</span> <span class="mh">0xC33707D6</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">3</span><span class="p">],</span> <span class="nx">S23</span><span class="p">,</span> <span class="mh">0xF4D50D87</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">8</span><span class="p">],</span> <span class="nx">S24</span><span class="p">,</span> <span class="mh">0x455A14ED</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">13</span><span class="p">],</span> <span class="nx">S21</span><span class="p">,</span> <span class="mh">0xA9E3E905</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">],</span> <span class="nx">S22</span><span class="p">,</span> <span class="mh">0xFCEFA3F8</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">7</span><span class="p">],</span> <span class="nx">S23</span><span class="p">,</span> <span class="mh">0x676F02D9</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_GG</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">12</span><span class="p">],</span> <span class="nx">S24</span><span class="p">,</span> <span class="mh">0x8D2A4C8A</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">5</span><span class="p">],</span> <span class="nx">S31</span><span class="p">,</span> <span class="mh">0xFFFA3942</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">8</span><span class="p">],</span> <span class="nx">S32</span><span class="p">,</span> <span class="mh">0x8771F681</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">11</span><span class="p">],</span> <span class="nx">S33</span><span class="p">,</span> <span class="mh">0x6D9D6122</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">14</span><span class="p">],</span> <span class="nx">S34</span><span class="p">,</span> <span class="mh">0xFDE5380C</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="nx">S31</span><span class="p">,</span> <span class="mh">0xA4BEEA44</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">4</span><span class="p">],</span> <span class="nx">S32</span><span class="p">,</span> <span class="mh">0x4BDECFA9</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">7</span><span class="p">],</span> <span class="nx">S33</span><span class="p">,</span> <span class="mh">0xF6BB4B60</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">10</span><span class="p">],</span> <span class="nx">S34</span><span class="p">,</span> <span class="mh">0xBEBFBC70</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">13</span><span class="p">],</span> <span class="nx">S31</span><span class="p">,</span> <span class="mh">0x289B7EC6</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">0</span><span class="p">],</span> <span class="nx">S32</span><span class="p">,</span> <span class="mh">0xEAA127FA</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">3</span><span class="p">],</span> <span class="nx">S33</span><span class="p">,</span> <span class="mh">0xD4EF3085</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">6</span><span class="p">],</span> <span class="nx">S34</span><span class="p">,</span> <span class="mh">0x4881D05</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">9</span><span class="p">],</span> <span class="nx">S31</span><span class="p">,</span> <span class="mh">0xD9D4D039</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">12</span><span class="p">],</span> <span class="nx">S32</span><span class="p">,</span> <span class="mh">0xE6DB99E5</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">15</span><span class="p">],</span> <span class="nx">S33</span><span class="p">,</span> <span class="mh">0x1FA27CF8</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_HH</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">],</span> <span class="nx">S34</span><span class="p">,</span> <span class="mh">0xC4AC5665</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">0</span><span class="p">],</span> <span class="nx">S41</span><span class="p">,</span> <span class="mh">0xF4292244</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">7</span><span class="p">],</span> <span class="nx">S42</span><span class="p">,</span> <span class="mh">0x432AFF97</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">14</span><span class="p">],</span> <span class="nx">S43</span><span class="p">,</span> <span class="mh">0xAB9423A7</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">5</span><span class="p">],</span> <span class="nx">S44</span><span class="p">,</span> <span class="mh">0xFC93A039</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">12</span><span class="p">],</span> <span class="nx">S41</span><span class="p">,</span> <span class="mh">0x655B59C3</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">3</span><span class="p">],</span> <span class="nx">S42</span><span class="p">,</span> <span class="mh">0x8F0CCC92</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">10</span><span class="p">],</span> <span class="nx">S43</span><span class="p">,</span> <span class="mh">0xFFEFF47D</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="nx">S44</span><span class="p">,</span> <span class="mh">0x85845DD1</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">8</span><span class="p">],</span> <span class="nx">S41</span><span class="p">,</span> <span class="mh">0x6FA87E4F</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">15</span><span class="p">],</span> <span class="nx">S42</span><span class="p">,</span> <span class="mh">0xFE2CE6E0</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">6</span><span class="p">],</span> <span class="nx">S43</span><span class="p">,</span> <span class="mh">0xA3014314</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">13</span><span class="p">],</span> <span class="nx">S44</span><span class="p">,</span> <span class="mh">0x4E0811A1</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">4</span><span class="p">],</span> <span class="nx">S41</span><span class="p">,</span> <span class="mh">0xF7537E82</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">11</span><span class="p">],</span> <span class="nx">S42</span><span class="p">,</span> <span class="mh">0xBD3AF235</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">],</span> <span class="nx">S43</span><span class="p">,</span> <span class="mh">0x2AD7D2BB</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">_II</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x</span><span class="p">[</span><span class="nx">k</span> <span class="o">+</span> <span class="mi">9</span><span class="p">],</span> <span class="nx">S44</span><span class="p">,</span> <span class="mh">0xEB86D391</span><span class="p">)</span>
+    <span class="nx">a</span> <span class="o">=</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">AA</span><span class="p">)</span>
+    <span class="nx">b</span> <span class="o">=</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">BB</span><span class="p">)</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">CC</span><span class="p">)</span>
+    <span class="nx">d</span> <span class="o">=</span> <span class="nx">addUnsigned</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">DD</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">var</span> <span class="nx">temp</span> <span class="o">=</span> <span class="nx">wordToHex</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="o">+</span> <span class="nx">wordToHex</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span> <span class="o">+</span> <span class="nx">wordToHex</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="o">+</span> <span class="nx">wordToHex</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="nx">temp</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span>
+<span class="p">}</span></code></pre></figure>
+
+<a class="basic-alignment left themebutton" href="https://github.com/kvz/phpjs/blob/master/functions/strings/md5.js">View on GitHub</a>
+<a class="basic-alignment left themebutton" href="https://github.com/kvz/phpjs/edit/master/functions/strings/md5.js">Edit on GitHub</a>
+<a class="basic-alignment left themebutton" href="https://raw.githubusercontent.com/kvz/phpjs/master/functions/strings/md5.js">Source on GitHub</a>
+
+<div class="clearfix"></div>
+
+
+
+
+<h2>A community initiative</h2>
+<p>
+  php.js offers community built functions and goes by the
+  <a href="https://medium.com/what-i-learned-building/9216e1c9da7d">McDonald’s Theory</a>.
+  We’ll put online functions that aren't perfect, in the hopes to spark better contributions.
+  Do you have one? You can directly edit this file on GitHub, this will create a Pull Request that
+  the core team can review, and merge into our codebase.
+</p>
+<p>
+  This way of working also means that we don't offer any
+  production guarantees, and recommend to use php.js inspiration
+  and learning purposes only.
+</p>
+
+
+
+
+  <h2>Dependencies</h2>
+
+  <ul>
+  
+    <li><a href="/functions/utf8_encode">utf8_encode</a></li>
+  
+  </ul>
+
+
+
+  
+    <h2>Example 1</h2>
+    
+
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">md5</span><span class="p">(</span><span class="s1">'Kevin van Zonneveld'</span><span class="p">);</span></code></pre></figure>
+
+    Should return:
+    <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="s1">'6e658d4bfcb59cc13f96c14450ac40b9'</span></code></pre></figure>
+  
+
+
+<p>
+  <a class="basic-alignment left themebutton" href="/functions/#strings">&laquo; More strings functions</a>
+</p>
+
+  </article>
+</div>
+
+
+
+      <aside class="sidebar">
+        <section>
+  <h1>Advertisement</h1>
+  <div id="carbonads-container" style="padding-top: 20px !important; padding-left: 40px !important; ">
+    <div class="carbonad">
+      <div id="azcarbon"></div>
+      <script type="text/javascript">
+        var z = document.createElement("script");
+        z.type = "text/javascript";
+        z.async = true;
+        z.src = "http://engine.carbonads.com/z/55999/azcarbon_2_1_0_VERT";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(z, s);
+      </script>
+    </div>
+  </div>
+
+  <h1>Uploading &amp; Encoding</h1>
+  <p>
+    Struggling with file uploads?
+    <a title="File uploading &amp; encoding service" style="color: #3464a4;" href="https://transloadit.com">Transloadit</a>
+    deals with progress bars, encoding, resizing, and storing, so you can focus on your web/app. It's pretty sweet.
+  </p>
+</section>
+
+<!-- Generated by Rakefile:build -->
+<section>
+  <h1>Categories</h1>
+  <ul id='category-list'>
+    
+    
+    <li><a href="/functions/#array">array</a> (75)</li>
+    
+    <li><a href="/functions/#bc">bc</a> (7)</li>
+    
+    <li><a href="/functions/#ctype">ctype</a> (11)</li>
+    
+    <li><a href="/functions/#datetime">datetime</a> (15)</li>
+    
+    <li><a href="/functions/#exec">exec</a> (1)</li>
+    
+    <li><a href="/functions/#filesystem">filesystem</a> (5)</li>
+    
+    <li><a href="/functions/#funchand">funchand</a> (5)</li>
+    
+    <li><a href="/functions/#i18n">i18n</a> (2)</li>
+    
+    <li><a href="/functions/#info">info</a> (7)</li>
+    
+    <li><a href="/functions/#json">json</a> (3)</li>
+    
+    <li><a href="/functions/#math">math</a> (46)</li>
+    
+    <li><a href="/functions/#misc">misc</a> (3)</li>
+    
+    <li><a href="/functions/#net-gopher">net-gopher</a> (1)</li>
+    
+    <li><a href="/functions/#network">network</a> (6)</li>
+    
+    <li><a href="/functions/#pcre">pcre</a> (3)</li>
+    
+    <li><a href="/functions/#strings">strings</a> (91)</li>
+    
+    <li><a href="/functions/#url">url</a> (10)</li>
+    
+    <li><a href="/functions/#var">var</a> (31)</li>
+    
+    <li><a href="/functions/#xdiff">xdiff</a> (2)</li>
+    
+    <li><a href="/functions/#xml">xml</a> (2)</li>
+    
+  </ul>
+</section>
+<section>
+  <h1>On the githubs</h1>
+  <ul class="on-the-githubs" data-event-source="repos/kvz/phpjs">Loading...</ul>
+  <br />
+  <br />
+</section>
+
+
+<section>
+  <h1>Badges</h1>
+
+  <p>
+    <a href="http://travis-ci.org/kvz/phpjs"><img src="https://secure.travis-ci.org/kvz/phpjs.png?branch=master" /></a>
+    <br />
+    <a href="https://npmjs.org/package/phpjs"><img src="http://badge.fury.io/js/phpjs.png" /></a>
+    <br />
+    <a href="https://david-dm.org/kvz/phpjs"><img src="https://david-dm.org/kvz/phpjs.png?theme=shields.io" /></a>
+    <br />
+    <a href="https://david-dm.org/kvz/phpjs#info=devDependencies"><img src="https://david-dm.org/kvz/phpjs/dev-status.png?theme=shields.io" /></a>
+    <br />
+  </p>
+
+  <h1>Sponsor development</h1>
+
+  <p>
+    <a href="https://www.gittip.com/kvz/"><img src="http://img.shields.io/gittip/kvz.png?color=green" /></a>
+    <br />
+    <a href="https://flattr.com/submit/auto?user_id=kvz&url=https://github.com/kvz/phpjs&title=phpjs&language=&tags=github&category=software"><img src="http://img.shields.io/flattr/donate.png?color=green" /></a>
+    <br />
+    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=kevin%40vanzonneveld%2enet&lc=NL&item_name=Open%20source%20donation%20to%20Kevin%20van%20Zonneveld&currency_code=USD&bn=PP-DonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><img src="http://img.shields.io/paypal/donate.png?color=green" /></a>
+    <br />
+    <a href="https://coinbase.com/checkouts/19BtCjLCboRgTAXiaEvnvkdoRyjd843Dg2"><img src="http://img.shields.io/bitcoin/donate.png?color=green" /></a>
+    <br />
+  </p>
+</section>
+
+      </aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo">
+    <p>
+      Copyright &copy; 2007-2016 - <a href="http://twitter.com/kvz">Kevin van Zonneveld</a> and <a href="/authors/">contributors</a> -
+      <span class="credit">Powered by <a href="http://jekyllrb.com">Jekyll</a></span> -
+      <span class="credit">Theme by <a href="http://melandri.net/2012/07/23/darkstripes-octopress-theme-released/">alessandro melandri</a></span>
+    </p>
+
+  </footer>
+
+  <script data-meta="js.app" src="/assets/build/app.js"></script>
+
+  <script src="//kvz.github.io/on-the-githubs/js/jquery.on-the-githubs.min.js"></script>
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.on-the-githubs').onthegithubs();
+      // If you use bootstrap and want to enable tooltips
+      // $('a[rel]').tooltip();
+    })
+  </script>
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-63083-7']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script');
+      ga.type = 'text/javascript';
+      ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</body>
+</html>
