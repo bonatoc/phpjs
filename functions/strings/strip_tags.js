@@ -34,11 +34,11 @@ function strip_tags (input, allowed) {
 
   allowed = (((allowed || '') + '')
       .toLowerCase()
-      .match(/<[a-z][a-z0-9]*>/g) || [])
+      .match(/<\w*(-)?\w*>/g) || []) // modern js frameworks, and broadly HTML5, require a looser tag parsing, and should allow for hyphens (AngularJS template directives, etc.) (possibly underscores?)
     .join('') // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
-  var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
+	  var tags = /<\/?(\w*(-)?\w*)\b[^>]*>/gi,
     commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi
-  return input.replace(commentsAndPhpTags, '')
+  return input.replace(commentsAndPhpTags, '') // modern js frameworks require a looser tag parsing, and should allow for hyphens (possibly underscores?)
     .replace(tags, function ($0, $1) {
       return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : ''
     })
